@@ -1,0 +1,30 @@
+{
+  "title": "NextGen Personal Trading Bot",
+  "description": "An AI-powered personal trading bot that analyzes user capital, recommends optimal trading strategies, and executes trades across small-cap and mid-cap stocks with customizable time horizons.",
+  "goals": [
+    "Democratize algorithmic trading for retail investors",
+    "Provide personalized trading strategies based on capital and risk tolerance",
+    "Optimize portfolio allocation between small-cap and mid-cap opportunities",
+    "Enable flexible trading periods from weeks to months",
+    "Deliver superior risk-adjusted returns through AI-driven insights"
+  ],
+  "targetMarket": "Retail investors and active traders",
+  "timeline": "Q2 2025",
+  "keyFeatures": [
+    "Capital-based strategy recommendation engine",
+    "Small-cap vs mid-cap allocation optimizer",
+    "Flexible trading period configuration (1 week to 12 months)",
+    "Real-time market analysis and trade execution",
+    "Risk management and portfolio protection",
+    "Performance tracking and analytics dashboard",
+    "Regulatory compliance and reporting tools"
+  ],
+  "targetUsers": [
+    "Retail investors with $10K-$500K capital",
+    "Active traders seeking automation",
+    "Busy professionals wanting passive trading",
+    "Sophisticated investors exploring algorithmic strategies"
+  ],
+  "platform": "web",
+  "designStyle": "professional"
+}
