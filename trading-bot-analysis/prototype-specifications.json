@@ -1,0 +1,496 @@
+{
+  "timestamp": "2024-12-19T11:30:00.000Z",
+  "product": "NextGen Personal Trading Bot",
+  "prototypeVersion": "1.0",
+  "projectStructure": {
+    "frontend": {
+      "pages/": {
+        "index.tsx": "Landing page with value proposition",
+        "onboarding/": {
+          "capital.tsx": "Capital amount input and validation",
+          "preferences.tsx": "Risk tolerance and time horizon setup",
+          "strategy.tsx": "AI strategy recommendation display",
+          "broker.tsx": "Broker connection and verification"
+        },
+        "dashboard/": {
+          "overview.tsx": "Main portfolio dashboard",
+          "positions.tsx": "Active positions and trade history",
+          "performance.tsx": "Performance analytics and charts",
+          "settings.tsx": "Account and strategy settings"
+        },
+        "paper-trading.tsx": "Simulated trading environment"
+      },
+      "components/": {
+        "layout/": {
+          "Header.tsx": "Navigation and user menu",
+          "Sidebar.tsx": "Main navigation sidebar",
+          "Footer.tsx": "Footer with links and legal"
+        },
+        "trading/": {
+          "CapitalInput.tsx": "Capital amount input with validation",
+          "StrategyCard.tsx": "Strategy recommendation display",
+          "PositionCard.tsx": "Individual position display",
+          "PerformanceChart.tsx": "Portfolio performance visualization",
+          "RiskMeter.tsx": "Risk assessment display"
+        },
+        "ui/": {
+          "Button.tsx": "Reusable button component",
+          "Input.tsx": "Form input components",
+          "Card.tsx": "Content card wrapper",
+          "Modal.tsx": "Modal dialog component",
+          "LoadingSpinner.tsx": "Loading state indicator"
+        }
+      },
+      "styles/": {
+        "globals.css": "Global styles and CSS variables",
+        "components.css": "Component-specific styles"
+      }
+    },
+    "backend": {
+      "src/": {
+        "controllers/": {
+          "auth.ts": "Authentication and user management",
+          "trading.ts": "Trading operations and strategy execution",
+          "portfolio.ts": "Portfolio management and analytics",
+          "market-data.ts": "Market data fetching and processing"
+        },
+        "services/": {
+          "strategy-engine.ts": "AI strategy recommendation engine",
+          "risk-manager.ts": "Risk assessment and management",
+          "broker-integration.ts": "Broker API integration layer",
+          "performance-analytics.ts": "Performance calculation and analysis"
+        },
+        "models/": {
+          "User.ts": "User data model",
+          "Portfolio.ts": "Portfolio and positions model",
+          "Strategy.ts": "Trading strategy model",
+          "Trade.ts": "Individual trade model"
+        }
+      }
+    }
+  },
+  "userFlows": [
+    {
+      "name": "New User Onboarding",
+      "description": "Guide new users through account setup and first strategy configuration",
+      "steps": [
+        {
+          "stepNumber": 1,
+          "action": "User arrives at landing page",
+          "screen": "Landing Page",
+          "userIntent": "Learn about the product and sign up",
+          "successCriteria": "User clicks 'Get Started' button"
+        },
+        {
+          "stepNumber": 2,
+          "action": "User enters capital amount",
+          "screen": "Capital Input",
+          "userIntent": "Specify available trading capital",
+          "successCriteria": "Valid capital amount ($10K-$1M) entered"
+        },
+        {
+          "stepNumber": 3,
+          "action": "User sets risk tolerance and time horizon",
+          "screen": "Preferences Setup",
+          "userIntent": "Configure trading preferences",
+          "successCriteria": "Risk level (1-10) and time horizon selected"
+        },
+        {
+          "stepNumber": 4,
+          "action": "AI generates strategy recommendations",
+          "screen": "Strategy Recommendations",
+          "userIntent": "Review and select trading strategy",
+          "successCriteria": "User selects preferred strategy"
+        },
+        {
+          "stepNumber": 5,
+          "action": "User connects broker account",
+          "screen": "Broker Integration",
+          "userIntent": "Enable live trading",
+          "successCriteria": "Broker account successfully connected"
+        },
+        {
+          "stepNumber": 6,
+          "action": "User reviews and activates bot",
+          "screen": "Activation Confirmation",
+          "userIntent": "Start automated trading",
+          "successCriteria": "Trading bot activated successfully"
+        }
+      ],
+      "entryPoints": ["Landing page", "Referral links", "Marketing campaigns"],
+      "exitPoints": ["Dashboard", "Paper trading mode"]
+    },
+    {
+      "name": "Strategy Configuration",
+      "description": "Allow users to customize and optimize their trading strategies",
+      "steps": [
+        {
+          "stepNumber": 1,
+          "action": "User accesses strategy settings",
+          "screen": "Dashboard Settings",
+          "userIntent": "Modify current strategy",
+          "successCriteria": "Strategy configuration panel opens"
+        },
+        {
+          "stepNumber": 2,
+          "action": "User adjusts capital allocation",
+          "screen": "Allocation Settings",
+          "userIntent": "Optimize small-cap vs mid-cap allocation",
+          "successCriteria": "New allocation percentages set"
+        },
+        {
+          "stepNumber": 3,
+          "action": "User modifies risk parameters",
+          "screen": "Risk Settings",
+          "userIntent": "Adjust risk tolerance and limits",
+          "successCriteria": "Risk parameters updated"
+        },
+        {
+          "stepNumber": 4,
+          "action": "System shows backtesting results",
+          "screen": "Backtest Results",
+          "userIntent": "Validate strategy changes",
+          "successCriteria": "User reviews performance projections"
+        },
+        {
+          "stepNumber": 5,
+          "action": "User saves and activates changes",
+          "screen": "Confirmation",
+          "userIntent": "Apply new strategy",
+          "successCriteria": "Strategy updated and bot continues trading"
+        }
+      ],
+      "entryPoints": ["Dashboard", "Performance analysis", "Notifications"],
+      "exitPoints": ["Dashboard", "Paper trading for testing"]
+    },
+    {
+      "name": "Performance Monitoring",
+      "description": "Users monitor and analyze their trading bot performance",
+      "steps": [
+        {
+          "stepNumber": 1,
+          "action": "User opens dashboard",
+          "screen": "Portfolio Overview",
+          "userIntent": "Check current performance",
+          "successCriteria": "Portfolio value and P&L displayed"
+        },
+        {
+          "stepNumber": 2,
+          "action": "User reviews active positions",
+          "screen": "Positions View",
+          "userIntent": "Monitor current trades",
+          "successCriteria": "All positions with entry/exit targets shown"
+        },
+        {
+          "stepNumber": 3,
+          "action": "User analyzes performance metrics",
+          "screen": "Performance Analytics",
+          "userIntent": "Understand strategy effectiveness",
+          "successCriteria": "Key metrics and benchmarks displayed"
+        },
+        {
+          "stepNumber": 4,
+          "action": "User receives AI insights",
+          "screen": "AI Insights Panel",
+          "userIntent": "Get recommendations for improvement",
+          "successCriteria": "Actionable insights provided"
+        }
+      ],
+      "entryPoints": ["Dashboard", "Mobile app", "Email notifications"],
+      "exitPoints": ["Strategy adjustment", "Account settings"]
+    }
+  ],
+  "componentSpecs": [
+    {
+      "name": "CapitalInput",
+      "type": "component",
+      "description": "Interactive capital amount input with validation and strategy impact preview",
+      "props": {
+        "initialValue": "number",
+        "minValue": "number (10000)",
+        "maxValue": "number (1000000)",
+        "onChange": "function",
+        "showStrategyPreview": "boolean"
+      },
+      "interactions": [
+        "Real-time validation as user types",
+        "Strategy preview updates based on capital amount",
+        "Visual indicators for different capital tiers",
+        "Helpful tooltips explaining capital impact"
+      ],
+      "responsiveBreakpoints": ["mobile", "tablet", "desktop"]
+    },
+    {
+      "name": "StrategyCard",
+      "type": "component",
+      "description": "Display recommended trading strategy with performance metrics and customization options",
+      "props": {
+        "strategy": "StrategyObject",
+        "backtestData": "PerformanceData",
+        "isSelected": "boolean",
+        "onSelect": "function",
+        "onCustomize": "function"
+      },
+      "interactions": [
+        "Expandable details on click",
+        "Performance chart hover effects",
+        "Customization button actions",
+        "Selection state management"
+      ],
+      "responsiveBreakpoints": ["mobile", "tablet", "desktop"]
+    },
+    {
+      "name": "PerformanceChart",
+      "type": "component",
+      "description": "Interactive portfolio performance visualization with benchmark comparison",
+      "props": {
+        "portfolioData": "TimeSeriesData",
+        "benchmarkData": "TimeSeriesData",
+        "timeRange": "string",
+        "showDrawdown": "boolean"
+      },
+      "interactions": [
+        "Time range selector (1D, 1W, 1M, 3M, 1Y)",
+        "Hover tooltips with detailed metrics",
+        "Zoom and pan functionality",
+        "Toggle benchmark comparison"
+      ],
+      "responsiveBreakpoints": ["mobile", "tablet", "desktop"]
+    },
+    {
+      "name": "RiskMeter",
+      "type": "component",
+      "description": "Visual risk assessment display with current portfolio risk level",
+      "props": {
+        "currentRisk": "number (1-10)",
+        "targetRisk": "number (1-10)",
+        "riskMetrics": "RiskMetricsObject",
+        "onRiskChange": "function"
+      },
+      "interactions": [
+        "Interactive risk level adjustment",
+        "Hover details for risk metrics",
+        "Visual risk level indicators",
+        "Warning alerts for high risk"
+      ],
+      "responsiveBreakpoints": ["mobile", "tablet", "desktop"]
+    },
+    {
+      "name": "PositionCard",
+      "type": "component",
+      "description": "Individual stock position display with entry/exit information and controls",
+      "props": {
+        "position": "PositionObject",
+        "currentPrice": "number",
+        "showControls": "boolean",
+        "onClose": "function"
+      },
+      "interactions": [
+        "Expandable position details",
+        "Manual close position option",
+        "Real-time P&L updates",
+        "Price alerts and notifications"
+      ],
+      "responsiveBreakpoints": ["mobile", "tablet", "desktop"]
+    },
+    {
+      "name": "DashboardLayout",
+      "type": "layout",
+      "description": "Main dashboard layout with responsive sidebar and content areas",
+      "props": {
+        "user": "UserObject",
+        "sidebarCollapsed": "boolean",
+        "children": "ReactNode"
+      },
+      "children": ["Header", "Sidebar", "MainContent", "Footer"],
+      "interactions": [
+        "Collapsible sidebar",
+        "Responsive navigation menu",
+        "User profile dropdown",
+        "Notification center"
+      ],
+      "responsiveBreakpoints": ["mobile", "tablet", "desktop"]
+    }
+  ],
+  "designSystem": {
+    "colors": {
+      "primary": {
+        "50": "#f0f9ff",
+        "100": "#e0f2fe",
+        "500": "#0ea5e9",
+        "600": "#0284c7",
+        "700": "#0369a1",
+        "900": "#0c4a6e"
+      },
+      "success": {
+        "100": "#dcfce7",
+        "500": "#22c55e",
+        "700": "#15803d"
+      },
+      "error": {
+        "100": "#fee2e2",
+        "500": "#ef4444",
+        "700": "#b91c1c"
+      },
+      "warning": {
+        "100": "#fef3c7",
+        "500": "#f59e0b",
+        "700": "#d97706"
+      },
+      "neutral": {
+        "50": "#f8fafc",
+        "100": "#f1f5f9",
+        "200": "#e2e8f0",
+        "300": "#cbd5e1",
+        "400": "#94a3b8",
+        "500": "#64748b",
+        "600": "#475569",
+        "700": "#334155",
+        "800": "#1e293b",
+        "900": "#0f172a"
+      }
+    },
+    "typography": {
+      "fontFamily": {
+        "sans": ["Inter", "system-ui", "sans-serif"],
+        "mono": ["JetBrains Mono", "monospace"]
+      },
+      "fontSize": {
+        "xs": "0.75rem",
+        "sm": "0.875rem",
+        "base": "1rem",
+        "lg": "1.125rem",
+        "xl": "1.25rem",
+        "2xl": "1.5rem",
+        "3xl": "1.875rem",
+        "4xl": "2.25rem"
+      },
+      "fontWeight": {
+        "normal": "400",
+        "medium": "500",
+        "semibold": "600",
+        "bold": "700"
+      }
+    },
+    "spacing": {
+      "xs": "0.25rem",
+      "sm": "0.5rem",
+      "md": "1rem",
+      "lg": "1.5rem",
+      "xl": "2rem",
+      "2xl": "3rem",
+      "3xl": "4rem"
+    },
+    "components": {
+      "button": {
+        "primary": {
+          "backgroundColor": "primary.600",
+          "color": "white",
+          "padding": "md lg",
+          "borderRadius": "0.5rem",
+          "fontSize": "base",
+          "fontWeight": "medium"
+        },
+        "secondary": {
+          "backgroundColor": "neutral.100",
+          "color": "neutral.700",
+          "padding": "md lg",
+          "borderRadius": "0.5rem",
+          "fontSize": "base",
+          "fontWeight": "medium"
+        }
+      },
+      "card": {
+        "default": {
+          "backgroundColor": "white",
+          "borderRadius": "0.75rem",
+          "padding": "xl",
+          "boxShadow": "0 1px 3px rgba(0,0,0,0.1)",
+          "border": "1px solid neutral.200"
+        }
+      },
+      "input": {
+        "default": {
+          "backgroundColor": "white",
+          "border": "1px solid neutral.300",
+          "borderRadius": "0.5rem",
+          "padding": "sm md",
+          "fontSize": "base"
+        }
+      }
+    }
+  },
+  "codeFiles": {
+    "package.json": "{\n  \"name\": \"nextgen-trading-bot\",\n  \"version\": \"0.1.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"dev\": \"next dev\",\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"lint\": \"next lint\"\n  },\n  \"dependencies\": {\n    \"next\": \"^14.0.0\",\n    \"react\": \"^18.0.0\",\n    \"react-dom\": \"^18.0.0\",\n    \"@types/node\": \"^20.0.0\",\n    \"@types/react\": \"^18.0.0\",\n    \"@types/react-dom\": \"^18.0.0\",\n    \"typescript\": \"^5.0.0\",\n    \"tailwindcss\": \"^3.3.0\",\n    \"autoprefixer\": \"^10.4.16\",\n    \"postcss\": \"^8.4.31\",\n    \"lucide-react\": \"^0.292.0\",\n    \"framer-motion\": \"^10.16.5\",\n    \"recharts\": \"^2.8.0\",\n    \"date-fns\": \"^2.30.0\",\n    \"react-hook-form\": \"^7.47.0\",\n    \"zod\": \"^3.22.4\"\n  },\n  \"devDependencies\": {\n    \"eslint\": \"^8.0.0\",\n    \"eslint-config-next\": \"^14.0.0\",\n    \"@types/recharts\": \"^1.8.24\"\n  }\n}",
+    "pages/index.tsx": "import React from 'react';\nimport { motion } from 'framer-motion';\nimport { TrendingUp, Shield, Zap, BarChart3 } from 'lucide-react';\n\nexport default function LandingPage() {\n  return (\n    <div className=\"min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100\">\n      {/* Header */}\n      <header className=\"px-6 py-4\">\n        <nav className=\"flex items-center justify-between max-w-7xl mx-auto\">\n          <div className=\"flex items-center space-x-2\">\n            <TrendingUp className=\"h-8 w-8 text-blue-600\" />\n            <span className=\"text-xl font-bold text-gray-900\">NextGen Trading Bot</span>\n          </div>\n          <div className=\"hidden md:flex items-center space-x-6\">\n            <a href=\"#features\" className=\"text-gray-600 hover:text-gray-900\">Features</a>\n            <a href=\"#pricing\" className=\"text-gray-600 hover:text-gray-900\">Pricing</a>\n            <button className=\"bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700\">\n              Get Started\n            </button>\n          </div>\n        </nav>\n      </header>\n\n      {/* Hero Section */}\n      <section className=\"px-6 py-20\">\n        <div className=\"max-w-4xl mx-auto text-center\">\n          <motion.h1 \n            className=\"text-5xl md:text-6xl font-bold text-gray-900 mb-6\"\n            initial={{ opacity: 0, y: 20 }}\n            animate={{ opacity: 1, y: 0 }}\n            transition={{ duration: 0.8 }}\n          >\n            Institutional AI Trading\n            <span className=\"text-blue-600\"> for Everyone</span>\n          </motion.h1>\n          \n          <motion.p \n            className=\"text-xl text-gray-600 mb-8 max-w-2xl mx-auto\"\n            initial={{ opacity: 0, y: 20 }}\n            animate={{ opacity: 1, y: 0 }}\n            transition={{ duration: 0.8, delay: 0.2 }}\n          >\n            The first AI trading bot that personalizes strategies based on your exact capital amount, \n            optimizes between small-cap and mid-cap opportunities, and adapts to your preferred trading timeframe.\n          </motion.p>\n\n          <motion.div \n            className=\"flex flex-col sm:flex-row gap-4 justify-center\"\n            initial={{ opacity: 0, y: 20 }}\n            animate={{ opacity: 1, y: 0 }}\n            transition={{ duration: 0.8, delay: 0.4 }}\n          >\n            <button className=\"bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors\">\n              Start Free Trial\n            </button>\n            <button className=\"border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-lg text-lg font-semibold hover:border-gray-400 transition-colors\">\n              Watch Demo\n            </button>\n          </motion.div>\n        </div>\n      </section>\n\n      {/* Features Section */}\n      <section id=\"features\" className=\"px-6 py-20 bg-white\">\n        <div className=\"max-w-6xl mx-auto\">\n          <div className=\"text-center mb-16\">\n            <h2 className=\"text-3xl md:text-4xl font-bold text-gray-900 mb-4\">\n              Intelligent Trading, Personalized for You\n            </h2>\n            <p className=\"text-xl text-gray-600 max-w-2xl mx-auto\">\n              Our AI analyzes your capital, risk tolerance, and goals to create a trading strategy \n              that's uniquely yours.\n            </p>\n          </div>\n\n          <div className=\"grid md:grid-cols-2 lg:grid-cols-4 gap-8\">\n            <FeatureCard \n              icon={<Zap className=\"h-8 w-8 text-blue-600\" />}\n              title=\"Capital-Aware Strategies\"\n              description=\"Algorithms that adapt to your specific capital amount, from $10K to $1M+\"\n            />\n            <FeatureCard \n              icon={<BarChart3 className=\"h-8 w-8 text-blue-600\" />}\n              title=\"Smart Cap Allocation\"\n              description=\"Optimal allocation between small-cap and mid-cap stocks based on market conditions\"\n            />\n            <FeatureCard \n              icon={<Shield className=\"h-8 w-8 text-blue-600\" />}\n              title=\"Risk Management\"\n              description=\"Advanced risk controls and portfolio protection with real-time monitoring\"\n            />\n            <FeatureCard \n              icon={<TrendingUp className=\"h-8 w-8 text-blue-600\" />}\n              title=\"Flexible Timeframes\"\n              description=\"Configure trading periods from 1 week to 12 months to match your goals\"\n            />\n          </div>\n        </div>\n      </section>\n\n      {/* CTA Section */}\n      <section className=\"px-6 py-20 bg-blue-600\">\n        <div className=\"max-w-4xl mx-auto text-center text-white\">\n          <h2 className=\"text-3xl md:text-4xl font-bold mb-4\">\n            Ready to Transform Your Trading?\n          </h2>\n          <p className=\"text-xl mb-8 opacity-90\">\n            Join thousands of investors already using AI to optimize their portfolios.\n          </p>\n          <button className=\"bg-white text-blue-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors\">\n            Start Your Free Trial\n          </button>\n        </div>\n      </section>\n    </div>\n  );\n}\n\nfunction FeatureCard({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) {\n  return (\n    <div className=\"text-center p-6\">\n      <div className=\"mb-4 flex justify-center\">{icon}</div>\n      <h3 className=\"text-xl font-semibold text-gray-900 mb-2\">{title}</h3>\n      <p className=\"text-gray-600\">{description}</p>\n    </div>\n  );\n}",
+    "components/CapitalInput.tsx": "import React, { useState, useEffect } from 'react';\nimport { DollarSign, Info } from 'lucide-react';\n\ninterface CapitalInputProps {\n  initialValue?: number;\n  minValue?: number;\n  maxValue?: number;\n  onChange: (value: number) => void;\n  showStrategyPreview?: boolean;\n}\n\nexport default function CapitalInput({\n  initialValue = 50000,\n  minValue = 10000,\n  maxValue = 1000000,\n  onChange,\n  showStrategyPreview = true\n}: CapitalInputProps) {\n  const [capital, setCapital] = useState(initialValue);\n  const [inputValue, setInputValue] = useState(formatCurrency(initialValue));\n  const [isValid, setIsValid] = useState(true);\n\n  useEffect(() => {\n    onChange(capital);\n  }, [capital, onChange]);\n\n  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {\n    const value = e.target.value.replace(/[^0-9]/g, '');\n    const numericValue = parseInt(value) || 0;\n    \n    setInputValue(formatCurrency(numericValue));\n    \n    if (numericValue >= minValue && numericValue <= maxValue) {\n      setCapital(numericValue);\n      setIsValid(true);\n    } else {\n      setIsValid(false);\n    }\n  };\n\n  const getCapitalTier = (amount: number) => {\n    if (amount < 25000) return 'Starter';\n    if (amount < 100000) return 'Growth';\n    if (amount < 500000) return 'Advanced';\n    return 'Professional';\n  };\n\n  const getStrategyRecommendation = (amount: number) => {\n    const tier = getCapitalTier(amount);\n    const strategies = {\n      'Starter': 'Conservative growth with 70% mid-cap, 30% small-cap allocation',\n      'Growth': 'Balanced approach with 60% mid-cap, 40% small-cap allocation', \n      'Advanced': 'Aggressive growth with 50% mid-cap, 50% small-cap allocation',\n      'Professional': 'Custom allocation with advanced risk management'\n    };\n    return strategies[tier as keyof typeof strategies];\n  };\n\n  return (\n    <div className=\"max-w-md mx-auto p-6 bg-white rounded-xl shadow-lg\">\n      <div className=\"mb-6\">\n        <label className=\"block text-sm font-medium text-gray-700 mb-2\">\n          Trading Capital Amount\n        </label>\n        \n        <div className=\"relative\">\n          <div className=\"absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none\">\n            <DollarSign className=\"h-5 w-5 text-gray-400\" />\n          </div>\n          \n          <input\n            type=\"text\"\n            value={inputValue}\n            onChange={handleInputChange}\n            className={`block w-full pl-10 pr-3 py-3 text-lg font-semibold border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${\n              isValid ? 'border-gray-300' : 'border-red-300'\n            }`}\n            placeholder=\"Enter amount\"\n          />\n        </div>\n        \n        {!isValid && (\n          <p className=\"mt-2 text-sm text-red-600\">\n            Amount must be between ${formatCurrency(minValue)} and ${formatCurrency(maxValue)}\n          </p>\n        )}\n        \n        <div className=\"mt-3 flex justify-between text-sm text-gray-500\">\n          <span>Min: ${formatCurrency(minValue)}</span>\n          <span>Max: ${formatCurrency(maxValue)}</span>\n        </div>\n      </div>\n\n      {/* Capital Tier Display */}\n      <div className=\"mb-6 p-4 bg-blue-50 rounded-lg\">\n        <div className=\"flex items-center mb-2\">\n          <Info className=\"h-4 w-4 text-blue-600 mr-2\" />\n          <span className=\"text-sm font-medium text-blue-900\">Capital Tier</span>\n        </div>\n        <div className=\"text-lg font-semibold text-blue-800\">\n          {getCapitalTier(capital)}\n        </div>\n      </div>\n\n      {/* Strategy Preview */}\n      {showStrategyPreview && isValid && (\n        <div className=\"p-4 bg-green-50 rounded-lg\">\n          <h4 className=\"text-sm font-medium text-green-900 mb-2\">\n            Recommended Strategy\n          </h4>\n          <p className=\"text-sm text-green-800\">\n            {getStrategyRecommendation(capital)}\n          </p>\n        </div>\n      )}\n    </div>\n  );\n}\n\nfunction formatCurrency(amount: number): string {\n  return amount.toLocaleString('en-US');\n}",
+    "components/PerformanceChart.tsx": "import React, { useState } from 'react';\nimport { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';\nimport { Calendar, TrendingUp, TrendingDown } from 'lucide-react';\n\ninterface PerformanceData {\n  date: string;\n  portfolio: number;\n  benchmark: number;\n  drawdown?: number;\n}\n\ninterface PerformanceChartProps {\n  portfolioData: PerformanceData[];\n  benchmarkData?: PerformanceData[];\n  timeRange?: string;\n  showDrawdown?: boolean;\n}\n\nconst timeRanges = [\n  { label: '1D', value: '1D' },\n  { label: '1W', value: '1W' },\n  { label: '1M', value: '1M' },\n  { label: '3M', value: '3M' },\n  { label: '1Y', value: '1Y' },\n  { label: 'ALL', value: 'ALL' }\n];\n\n// Sample data for demonstration\nconst sampleData: PerformanceData[] = [\n  { date: '2024-01', portfolio: 100000, benchmark: 100000 },\n  { date: '2024-02', portfolio: 103500, benchmark: 102000 },\n  { date: '2024-03', portfolio: 107200, benchmark: 103500 },\n  { date: '2024-04', portfolio: 105800, benchmark: 104200 },\n  { date: '2024-05', portfolio: 111500, benchmark: 106800 },\n  { date: '2024-06', portfolio: 115200, benchmark: 108500 },\n  { date: '2024-07', portfolio: 118900, benchmark: 110200 },\n  { date: '2024-08', portfolio: 116400, benchmark: 109800 },\n  { date: '2024-09', portfolio: 122100, benchmark: 112500 },\n  { date: '2024-10', portfolio: 125800, benchmark: 114200 },\n  { date: '2024-11', portfolio: 129500, benchmark: 116800 },\n  { date: '2024-12', portfolio: 133200, benchmark: 118500 }\n];\n\nexport default function PerformanceChart({\n  portfolioData = sampleData,\n  benchmarkData,\n  timeRange = '1Y',\n  showDrawdown = false\n}: PerformanceChartProps) {\n  const [selectedTimeRange, setSelectedTimeRange] = useState(timeRange);\n  const [showBenchmark, setShowBenchmark] = useState(true);\n\n  const calculateReturns = (data: PerformanceData[]) => {\n    if (data.length === 0) return { totalReturn: 0, annualizedReturn: 0 };\n    \n    const initial = data[0].portfolio;\n    const final = data[data.length - 1].portfolio;\n    const totalReturn = ((final - initial) / initial) * 100;\n    const annualizedReturn = totalReturn; // Simplified calculation\n    \n    return { totalReturn, annualizedReturn };\n  };\n\n  const { totalReturn, annualizedReturn } = calculateReturns(portfolioData);\n  const isPositive = totalReturn >= 0;\n\n  const formatTooltipValue = (value: number) => {\n    return `$${value.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;\n  };\n\n  const CustomTooltip = ({ active, payload, label }: any) => {\n    if (active && payload && payload.length) {\n      return (\n        <div className=\"bg-white p-4 border border-gray-200 rounded-lg shadow-lg\">\n          <p className=\"font-medium text-gray-900\">{`Date: ${label}`}</p>\n          {payload.map((entry: any, index: number) => (\n            <p key={index} className=\"text-sm\" style={{ color: entry.color }}>\n              {`${entry.name}: ${formatTooltipValue(entry.value)}`}\n            </p>\n          ))}\n        </div>\n      );\n    }\n    return null;\n  };\n\n  return (\n    <div className=\"bg-white p-6 rounded-xl shadow-lg\">\n      {/* Header */}\n      <div className=\"flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6\">\n        <div>\n          <h3 className=\"text-lg font-semibold text-gray-900 mb-1\">\n            Portfolio Performance\n          </h3>\n          <div className=\"flex items-center space-x-4\">\n            <div className=\"flex items-center\">\n              {isPositive ? (\n                <TrendingUp className=\"h-4 w-4 text-green-500 mr-1\" />\n              ) : (\n                <TrendingDown className=\"h-4 w-4 text-red-500 mr-1\" />\n              )}\n              <span className={`text-lg font-semibold ${\n                isPositive ? 'text-green-600' : 'text-red-600'\n              }`}>\n                {totalReturn > 0 ? '+' : ''}{totalReturn.toFixed(2)}%\n              </span>\n            </div>\n            <span className=\"text-sm text-gray-500\">\n              Annualized: {annualizedReturn.toFixed(2)}%\n            </span>\n          </div>\n        </div>\n        \n        {/* Time Range Selector */}\n        <div className=\"flex items-center space-x-1 mt-4 sm:mt-0\">\n          {timeRanges.map((range) => (\n            <button\n              key={range.value}\n              onClick={() => setSelectedTimeRange(range.value)}\n              className={`px-3 py-1 text-sm font-medium rounded ${\n                selectedTimeRange === range.value\n                  ? 'bg-blue-600 text-white'\n                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'\n              }`}\n            >\n              {range.label}\n            </button>\n          ))}\n        </div>\n      </div>\n\n      {/* Chart */}\n      <div className=\"h-80\">\n        <ResponsiveContainer width=\"100%\" height=\"100%\">\n          <LineChart data={portfolioData}>\n            <CartesianGrid strokeDasharray=\"3 3\" stroke=\"#f0f0f0\" />\n            <XAxis \n              dataKey=\"date\" \n              stroke=\"#6b7280\"\n              fontSize={12}\n            />\n            <YAxis \n              stroke=\"#6b7280\"\n              fontSize={12}\n              tickFormatter={(value) => `$${(value / 1000).toFixed(0)}K`}\n            />\n            <Tooltip content={<CustomTooltip />} />\n            \n            <Line \n              type=\"monotone\" \n              dataKey=\"portfolio\" \n              stroke=\"#2563eb\" \n              strokeWidth={3}\n              dot={false}\n              name=\"Portfolio\"\n            />\n            \n            {showBenchmark && (\n              <Line \n                type=\"monotone\" \n                dataKey=\"benchmark\" \n                stroke=\"#6b7280\" \n                strokeWidth={2}\n                strokeDasharray=\"5 5\"\n                dot={false}\n                name=\"S&P 500\"\n              />\n            )}\n            \n            <ReferenceLine y={portfolioData[0]?.portfolio} stroke=\"#d1d5db\" strokeDasharray=\"2 2\" />\n          </LineChart>\n        </ResponsiveContainer>\n      </div>\n\n      {/* Chart Controls */}\n      <div className=\"flex items-center justify-between mt-4 pt-4 border-t border-gray-200\">\n        <div className=\"flex items-center space-x-4\">\n          <label className=\"flex items-center\">\n            <input\n              type=\"checkbox\"\n              checked={showBenchmark}\n              onChange={(e) => setShowBenchmark(e.target.checked)}\n              className=\"mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded\"\n            />\n            <span className=\"text-sm text-gray-700\">Show S&P 500 Benchmark</span>\n          </label>\n        </div>\n        \n        <div className=\"text-xs text-gray-500\">\n          Updated: {new Date().toLocaleString()}\n        </div>\n      </div>\n    </div>\n  );\n}"
+  },
+  "deploymentInstructions": "# NextGen Trading Bot - Deployment Instructions\\n\\n## Development Setup\\n1. Install dependencies: `npm install`\\n2. Set up environment variables:\\n   ```\\n   NEXT_PUBLIC_API_URL=http://localhost:3001\\n   DATABASE_URL=postgresql://username:password@localhost:5432/tradingbot\\n   ALPACA_API_KEY=your_alpaca_key\\n   ALPACA_SECRET_KEY=your_alpaca_secret\\n   POLYGON_API_KEY=your_polygon_key\\n   ```\\n3. Run development server: `npm run dev`\\n4. Open http://localhost:3000\\n\\n## Production Deployment\\n\\n### Vercel (Recommended for Frontend)\\n1. Connect GitHub repository to Vercel\\n2. Set environment variables in Vercel dashboard\\n3. Deploy automatically on push to main branch\\n\\n### AWS (Backend Services)\\n1. Deploy API using AWS Lambda + API Gateway\\n2. Use RDS for PostgreSQL database\\n3. Set up CloudWatch for monitoring\\n4. Configure VPC for security\\n\\n### Security Requirements\\n- Enable HTTPS/TLS encryption\\n- Implement rate limiting\\n- Set up WAF (Web Application Firewall)\\n- Configure proper CORS policies\\n- Enable audit logging\\n\\n### Monitoring & Alerts\\n- Set up application performance monitoring\\n- Configure error tracking (Sentry)\\n- Create alerts for trading system failures\\n- Monitor API rate limits and costs",
+  "testingScenarios": [
+    {
+      "scenario": "New User Onboarding Flow",
+      "steps": [
+        "Navigate to landing page",
+        "Click 'Get Started' button",
+        "Enter capital amount ($50,000)",
+        "Set risk tolerance (5/10)",
+        "Select time horizon (3 months)",
+        "Review AI strategy recommendations",
+        "Connect paper trading account",
+        "Activate trading bot"
+      ],
+      "expectedOutcome": "User successfully completes onboarding and trading bot is activated in paper trading mode"
+    },
+    {
+      "scenario": "Capital Amount Validation",
+      "steps": [
+        "Navigate to capital input page",
+        "Enter amount below minimum ($5,000)",
+        "Verify error message appears",
+        "Enter amount above maximum ($2,000,000)",
+        "Verify error message appears", 
+        "Enter valid amount ($75,000)",
+        "Verify strategy recommendations update"
+      ],
+      "expectedOutcome": "Input validation works correctly and strategy recommendations adapt to capital amount"
+    },
+    {
+      "scenario": "Performance Dashboard Functionality",
+      "steps": [
+        "Log in to existing account",
+        "Navigate to performance dashboard",
+        "Verify portfolio value displays correctly",
+        "Check that active positions are shown",
+        "Test time range selector (1W, 1M, 3M)",
+        "Verify benchmark comparison toggle",
+        "Check that P&L calculations are accurate"
+      ],
+      "expectedOutcome": "Dashboard displays accurate performance data with interactive controls working properly"
+    },
+    {
+      "scenario": "Mobile Responsiveness",
+      "steps": [
+        "Access application on mobile device (iOS/Android)",
+        "Test navigation menu functionality",
+        "Verify all forms are usable on mobile",
+        "Check chart interactions work on touch",
+        "Test portrait and landscape orientations",
+        "Verify text is readable without zooming"
+      ],
+      "expectedOutcome": "Application is fully functional and visually appealing on mobile devices"
+    },
+    {
+      "scenario": "Risk Management Controls",
+      "steps": [
+        "Set up trading bot with specific risk limits",
+        "Simulate market conditions that trigger stop-loss",
+        "Verify positions are automatically closed",
+        "Test portfolio-level risk limits",
+        "Check that risk alerts are triggered",
+        "Verify emergency stop functionality"
+      ],
+      "expectedOutcome": "Risk management system properly protects user capital and enforces limits"
+    }
+  ]
+}
