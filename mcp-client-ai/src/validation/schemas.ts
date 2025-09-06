@@ -35,27 +35,32 @@ export const ProductConceptSchema = z.object({
     .optional()
 });
 
-export const TradingBotConceptSchema = ProductConceptSchema.extend({
-  capital: z.number()
-    .min(10000, "Minimum capital is $10,000")
-    .max(10000000, "Maximum capital is $10,000,000")
-    .int("Capital must be a whole number"),
+// Generic extended product concept for specialized products
+export const ExtendedProductConceptSchema = ProductConceptSchema.extend({
+  // Industry-specific fields (optional, dynamically added based on product type)
+  industrySpecific: z.record(z.any()).optional(),
   
-  riskTolerance: z.number()
-    .min(1, "Risk tolerance must be between 1 and 10")
-    .max(10, "Risk tolerance must be between 1 and 10")
-    .int("Risk tolerance must be a whole number"),
+  // Technical specifications
+  technicalRequirements: z.array(z.string()).optional(),
   
-  timeHorizon: z.enum(['1week', '2weeks', '1month', '3months', '6months', '12months'], {
-    errorMap: () => ({ message: "Invalid time horizon selected" })
-  }),
-  
-  platform: z.enum(['web', 'mobile', 'desktop'], {
+  // Platform preferences
+  platform: z.enum(['web', 'mobile', 'desktop', 'api', 'embedded'], {
     errorMap: () => ({ message: "Invalid platform selected" })
   }).optional(),
   
-  designStyle: z.enum(['minimal', 'modern', 'professional', 'playful'], {
+  // Design preferences
+  designStyle: z.enum(['minimal', 'modern', 'professional', 'playful', 'enterprise'], {
     errorMap: () => ({ message: "Invalid design style selected" })
+  }).optional(),
+  
+  // Business model hints
+  monetizationModel: z.enum(['subscription', 'freemium', 'one-time', 'usage-based', 'marketplace'], {
+    errorMap: () => ({ message: "Invalid monetization model" })
+  }).optional(),
+  
+  // Scale expectations
+  expectedScale: z.enum(['startup', 'growth', 'enterprise', 'global'], {
+    errorMap: () => ({ message: "Invalid scale expectation" })
   }).optional()
 });
 
@@ -276,7 +281,7 @@ export const RateLimitConfigSchema = z.object({
 // ============================================================================
 
 export type ProductConcept = z.infer<typeof ProductConceptSchema>;
-export type TradingBotConcept = z.infer<typeof TradingBotConceptSchema>;
+export type ExtendedProductConcept = z.infer<typeof ExtendedProductConceptSchema>;
 export type MarketResearchInput = z.infer<typeof MarketResearchInputSchema>;
 export type CompetitiveLandscapeInput = z.infer<typeof CompetitiveLandscapeInputSchema>;
 export type PrototypeRequirements = z.infer<typeof PrototypeRequirementsSchema>;
