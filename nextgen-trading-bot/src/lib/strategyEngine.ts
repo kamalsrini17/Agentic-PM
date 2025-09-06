@@ -1,6 +1,27 @@
 // Capital-Aware Strategy Engine
 // This is the core AI algorithm that personalizes trading strategies
 
+import { z } from 'zod';
+
+// Input validation schema
+const StrategyInputSchema = z.object({
+  capital: z.number().min(10000, "Minimum capital is $10,000").max(10000000, "Maximum capital is $10M"),
+  riskTolerance: z.number().min(1, "Risk tolerance must be 1-10").max(10, "Risk tolerance must be 1-10"),
+  timeHorizon: z.enum(['1week', '2weeks', '1month', '3months', '6months', '12months'])
+});
+
+function validateStrategyInput(capital: number, riskTolerance: number, timeHorizon: string) {
+  try {
+    return StrategyInputSchema.parse({ capital, riskTolerance, timeHorizon });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      const errorMessage = error.errors.map(err => `${err.path.join('.')}: ${err.message}`).join(', ');
+      throw new Error(`Strategy input validation failed: ${errorMessage}`);
+    }
+    throw error;
+  }
+}
+
 export interface TradingStrategy {
   name: string;
   description: string;
@@ -42,6 +63,9 @@ export function generateStrategy(
   riskTolerance: number,
   timeHorizon: string
 ): TradingStrategy {
+  // Validate inputs first
+  validateStrategyInput(capital, riskTolerance, timeHorizon);
+  
   // Capital tier classification
   const capitalTier = getCapitalTier(capital);
   
