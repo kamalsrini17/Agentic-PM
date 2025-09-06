@@ -9,7 +9,8 @@
     "axios": "^1.6.0",
     "dotenv": "^16.5.0",
     "openai": "^4.104.0",
-    "pdfkit": "^0.17.1"
+    "pdfkit": "^0.17.1",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

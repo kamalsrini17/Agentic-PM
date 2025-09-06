@@ -1,4 +1,20 @@
 import { OpenAI } from 'openai';
+import { 
+  CompetitiveLandscapeInputSchema,
+  MarketGapSchema,
+  validateInput,
+  type CompetitiveLandscapeInput,
+  type ValidationResult 
+} from '../validation/schemas';
+import { 
+  AgenticError, 
+  ErrorCode, 
+  withRetry, 
+  withFallback, 
+  handleOpenAIError,
+  handleZodError,
+  Logger 
+} from '../utils/errorHandling';
 
 interface CompetitorProfile {
   name: string;
@@ -109,19 +125,33 @@ interface CompetitiveLandscapeReport {
 
 export class CompetitiveLandscapeAgent {
   private openai: OpenAI;
+  private logger: Logger;
 
   constructor(openai: OpenAI) {
     this.openai = openai;
+    this.logger = Logger.getInstance();
   }
 
   async analyzeCompetitiveLandscape(
-    productTitle: string,
-    productDescription: string,
-    targetMarket: string,
-    geography: string = 'Global'
+    input: unknown
   ): Promise<CompetitiveLandscapeReport> {
+    const requestId = `cl_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    this.logger.setContext(requestId);
     
-    console.log(`[CompetitiveLandscapeAgent] Analyzing competitive landscape for: ${productTitle}`);
+    this.logger.info('Starting competitive landscape analysis', { 
+      productTitle: (input as any)?.productTitle 
+    }, 'CompetitiveLandscapeAgent');
+
+    // Validate input
+    const validationResult = validateInput(CompetitiveLandscapeInputSchema, input, 'Competitive Landscape Input');
+    if (!validationResult.success) {
+      this.logger.error('Input validation failed', validationResult.error, {
+        input: input
+      }, 'CompetitiveLandscapeAgent');
+      throw handleZodError(validationResult.error!.details!, 'Competitive Landscape Input');
+    }
+
+    const validatedInput = validationResult.data!;
 
     // Execute competitive analysis in parallel
     const [

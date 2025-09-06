@@ -1,12 +1,23 @@
 import { OpenAI } from 'openai';
 import axios from 'axios';
+import { 
+  MarketResearchInputSchema, 
+  MarketOpportunitySchema,
+  validateInput,
+  type MarketResearchInput,
+  type ValidationResult 
+} from '../validation/schemas';
+import { 
+  AgenticError, 
+  ErrorCode, 
+  withRetry, 
+  withFallback, 
+  handleOpenAIError,
+  handleZodError,
+  Logger 
+} from '../utils/errorHandling';
 
-interface MarketResearchInput {
-  productTitle: string;
-  productDescription: string;
-  targetMarket: string;
-  geography?: string;
-}
+// MarketResearchInput type is now imported from schemas
 
 interface MarketOpportunity {
   tam: number; // Total Addressable Market
@@ -76,43 +87,91 @@ interface MarketResearchReport {
 export class MarketResearchAgent {
   private openai: OpenAI;
   private webSearchEnabled: boolean = false; // Toggle for web search capability
+  private logger: Logger;
 
   constructor(openai: OpenAI) {
     this.openai = openai;
+    this.logger = Logger.getInstance();
   }
 
-  async conductMarketResearch(input: MarketResearchInput): Promise<MarketResearchReport> {
-    console.log(`[MarketResearchAgent] Starting comprehensive market research for: ${input.productTitle}`);
+  async conductMarketResearch(input: unknown): Promise<MarketResearchReport> {
+    const requestId = `mr_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    this.logger.setContext(requestId);
+    
+    this.logger.info('Starting market research analysis', { 
+      productTitle: (input as any)?.productTitle 
+    }, 'MarketResearchAgent');
 
-    // Parallel research execution for efficiency
-    const [
-      marketSizing,
-      competitiveIntel,
-      customerInsights,
-      trendAnalysis,
-      riskAssessment
-    ] = await Promise.all([
-      this.analyzeMarketSizing(input),
-      this.analyzeCompetitiveLandscape(input),
-      this.analyzeCustomerSegments(input),
-      this.analyzeTrends(input),
-      this.assessRisks(input)
-    ]);
+    // Validate input
+    const validationResult = validateInput(MarketResearchInputSchema, input, 'Market Research Input');
+    if (!validationResult.success) {
+      this.logger.error('Input validation failed', validationResult.error, {
+        input: input
+      }, 'MarketResearchAgent');
+      throw handleZodError(validationResult.error!.details!, 'Market Research Input');
+    }
 
-    // Synthesize findings into comprehensive report
-    const report = await this.synthesizeReport(input, {
-      marketSizing,
-      competitiveIntel,
-      customerInsights,
-      trendAnalysis,
-      riskAssessment
-    });
+    const validatedInput = validationResult.data!;
 
-    return report;
+    try {
+      // Parallel research execution for efficiency with error handling
+      const [
+        marketSizing,
+        competitiveIntel,
+        customerInsights,
+        trendAnalysis,
+        riskAssessment
+      ] = await Promise.all([
+        this.analyzeMarketSizing(validatedInput),
+        this.analyzeCompetitiveLandscape(validatedInput),
+        this.analyzeCustomerSegments(validatedInput),
+        this.analyzeTrends(validatedInput),
+        this.assessRisks(validatedInput)
+      ]);
+
+      // Synthesize findings into comprehensive report
+      const report = await this.synthesizeReport(validatedInput, {
+        marketSizing,
+        competitiveIntel,
+        customerInsights,
+        trendAnalysis,
+        riskAssessment
+      });
+
+      this.logger.info('Market research completed successfully', {
+        productTitle: validatedInput.productTitle,
+        reportSections: Object.keys(report)
+      }, 'MarketResearchAgent');
+
+      return report;
+
+    } catch (error) {
+      this.logger.error('Market research analysis failed', error as Error, {
+        productTitle: validatedInput.productTitle,
+        step: 'parallel_analysis'
+      }, 'MarketResearchAgent');
+
+      if (error instanceof AgenticError) {
+        throw error;
+      }
+
+      throw new AgenticError(
+        ErrorCode.MARKET_RESEARCH_ERROR,
+        `Market research failed: ${(error as Error).message}`,
+        'Market research analysis could not be completed. Please try again.',
+        { productTitle: validatedInput.productTitle, originalError: (error as Error).message },
+        true
+      );
+    }
   }
 
   private async analyzeMarketSizing(input: MarketResearchInput): Promise<MarketOpportunity> {
-    const prompt = `
+    return await withRetry(async () => {
+      this.logger.debug('Starting market sizing analysis', { 
+        productTitle: input.productTitle 
+      }, 'MarketResearchAgent');
+
+      const prompt = `
 As a market research analyst, provide a comprehensive market sizing analysis for the following product:
 
 Product: ${input.productTitle}
@@ -132,13 +191,59 @@ Provide realistic market sizing estimates with clear methodology. Include:
 Format as JSON with numerical values and clear reasoning.
 `;
 
-    const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.3 // Lower temperature for more factual analysis
-    });
+      try {
+        const response = await this.openai.chat.completions.create({
+          model: 'gpt-4',
+          messages: [{ role: 'user', content: prompt }],
+          temperature: 0.3,
+          timeout: 30000 // 30 second timeout
+        });
 
-    return this.parseJsonResponse(response.choices[0].message.content || '{}');
+        const content = response.choices[0].message.content;
+        if (!content) {
+          throw new AgenticError(
+            ErrorCode.GENERATION_FAILED,
+            'OpenAI returned empty response for market sizing',
+            'Market sizing analysis failed to generate content.',
+            { productTitle: input.productTitle },
+            true
+          );
+        }
+
+        const result = this.parseJsonResponse(content);
+        
+        // Validate the result structure
+        const validationResult = validateInput(MarketOpportunitySchema, result, 'Market Sizing Response');
+        if (!validationResult.success) {
+          this.logger.warn('Market sizing response validation failed, using fallback', {
+            error: validationResult.error,
+            rawResponse: content?.substring(0, 500)
+          }, 'MarketResearchAgent');
+          
+          return this.getMarketSizingFallback(input);
+        }
+
+        this.logger.debug('Market sizing analysis completed', {
+          tam: validationResult.data!.tam,
+          sam: validationResult.data!.sam
+        }, 'MarketResearchAgent');
+
+        return validationResult.data!;
+
+      } catch (error) {
+        if (error instanceof AgenticError) {
+          throw error;
+        }
+        
+        throw handleOpenAIError(error, 'Market Sizing Analysis');
+      }
+    }, {
+      maxAttempts: 3,
+      baseDelay: 2000,
+      retryCondition: (error: Error) => {
+        return error instanceof AgenticError && error.retryable;
+      }
+    });
   }
 
   private async analyzeCompetitiveLandscape(input: MarketResearchInput): Promise<any> {
@@ -307,20 +412,55 @@ Format as comprehensive JSON structure matching the MarketResearchReport interfa
   private parseJsonResponse(content: string): any {
     try {
       // Try to extract JSON from markdown code blocks
-      const jsonMatch = content.match(/```json\s*({[\s\S]*?})\s*```/);
+      const jsonMatch = content.match(/```json\s*({[\s\S]*?})\s*```/) ||
+                       content.match(/```\s*({[\s\S]*?})\s*```/) ||
+                       content.match(/({[\s\S]*})/);
+      
       const jsonString = jsonMatch ? jsonMatch[1] : content;
       
       return JSON.parse(jsonString);
     } catch (error) {
-      console.error('[MarketResearchAgent] Failed to parse JSON response:', error);
-      console.error('[DEBUG] Raw content:', content);
+      this.logger.error('Failed to parse JSON response', error as Error, {
+        contentLength: content.length,
+        contentPreview: content.substring(0, 200)
+      }, 'MarketResearchAgent');
       
-      // Return structured fallback
-      return {
-        error: 'Failed to parse market research data',
-        rawContent: content
-      };
+      throw new AgenticError(
+        ErrorCode.PROCESSING_ERROR,
+        `Failed to parse AI response: ${(error as Error).message}`,
+        'The AI response could not be processed. Please try again.',
+        { rawContent: content.substring(0, 500) },
+        true
+      );
     }
+  }
+
+  private getMarketSizingFallback(input: MarketResearchInput): MarketOpportunity {
+    this.logger.info('Using market sizing fallback', {
+      productTitle: input.productTitle
+    }, 'MarketResearchAgent');
+
+    // Provide a reasonable fallback based on common market patterns
+    const baseTAM = 1000000000; // $1B baseline
+    const tamMultiplier = input.targetMarket.toLowerCase().includes('global') ? 10 : 1;
+    
+    return {
+      tam: baseTAM * tamMultiplier,
+      sam: baseTAM * tamMultiplier * 0.1, // 10% of TAM
+      som: baseTAM * tamMultiplier * 0.01, // 1% of TAM
+      growthRate: 15, // 15% CAGR default
+      marketMaturity: 'growing' as const,
+      keyDrivers: [
+        'Digital transformation trends',
+        'Increasing market demand',
+        'Technology adoption'
+      ],
+      barriers: [
+        'Market competition',
+        'Regulatory requirements',
+        'Capital requirements'
+      ]
+    };
   }
 
   // Future enhancement: Web search integration
