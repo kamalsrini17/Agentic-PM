@@ -91,12 +91,6 @@ cd mcp-client-ai
 npm run demo
 ```
 
-### Testing API Connection
-
-```bash
-cd mcp-client-ai
-npm run test-api
-```
 
 ## 📁 Project Structure
 
@@ -193,56 +187,6 @@ We welcome contributions! Please follow these steps:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-### Coding Standards
-- Use TypeScript for all new code
-- Follow ESLint configuration
-- Write tests for new features
-- Update documentation as needed
-
-## 📈 Roadmap
-
-### Q1 2024
-- [ ] Web UI for non-technical users
-- [ ] Integration with popular PM tools (Jira, Asana)
-- [ ] Custom agent creation framework
-- [ ] Real-time collaboration features
-
-### Q2 2024
-- [ ] Mobile application
-- [ ] Advanced analytics dashboard
-- [ ] Plugin marketplace
-- [ ] Enterprise features
-
-### Q3 2024
-- [ ] Voice interface
-- [ ] AR/VR prototype visualization
-- [ ] Blockchain integration for IP protection
-- [ ] Advanced ML model fine-tuning
-
-## 🔒 Security
-
-- All API keys are stored securely in environment variables
-- No sensitive data is logged or stored in plain text
-- Regular security audits and dependency updates
-- SOC 2 compliance (in progress)
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- OpenAI for GPT-4 API
-- Anthropic for Claude API
-- The open-source community for invaluable tools and libraries
-- All contributors who have helped shape this project
-
-## 📞 Support
-
-- **Documentation**: [Full docs](https://docs.agenticpm.com) (coming soon)
-- **Issues**: [GitHub Issues](https://github.com/kamalsrini17/Agentic-PM/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/kamalsrini17/Agentic-PM/discussions)
-- **Email**: support@agenticpm.com
 
 ## 🌟 Star History
 
