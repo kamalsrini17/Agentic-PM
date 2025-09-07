@@ -6,6 +6,7 @@
     "start": "ts-node src/index.ts",
     "build": "tsc",
     "demo": "ts-node src/demo/quickDemo.ts",
+    "demo:enhanced": "ts-node src/demo/enhancedPromptDemo.ts",
     "test": "ts-node src/integration/SystemTests.ts"
   },
   "dependencies": {

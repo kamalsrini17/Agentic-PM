@@ -5,12 +5,17 @@
 
 // Core System
 export { UnifiedAgentSystem } from './integration/UnifiedAgentSystem';
+export { EnhancedUnifiedAgentSystem } from './integration/EnhancedUnifiedAgentSystem';
 export type { 
   ComprehensiveAnalysisRequest, 
   ComprehensiveAnalysisResult,
   SystemHealthReport,
   UnifiedSystemConfig 
 } from './integration/UnifiedAgentSystem';
+export type {
+  EnhancedAnalysisRequest,
+  EnhancedAnalysisResult
+} from './integration/EnhancedUnifiedAgentSystem';
 
 // Orchestration Framework
 export { WorkflowEngine } from './orchestration/WorkflowEngine';
@@ -60,17 +65,28 @@ export { MultiModelAI } from './services/MultiModelAI';
 // Testing
 export { SystemTests } from './integration/SystemTests';
 
+// New Components
+export { PromptProcessorAgent } from './agents/PromptProcessorAgent';
+export { SessionDocumentStore } from './storage/SessionDocumentStore';
+export { SimpleDocumentParser } from './parsers/SimpleDocumentParser';
+export type {
+  UserPromptInput,
+  ProcessedProductConcept,
+  UserDocument,
+  DocumentContext
+} from './agents/PromptProcessorAgent';
+
 // ============================================================================
 // QUICK START INTERFACE
 // ============================================================================
 
-import { UnifiedAgentSystem } from './integration/UnifiedAgentSystem';
+import { EnhancedUnifiedAgentSystem } from './integration/EnhancedUnifiedAgentSystem';
 
 /**
  * Quick Start - Create and configure a unified agent system
  */
 export class AgenticPM {
-  private system: UnifiedAgentSystem;
+  private system: EnhancedUnifiedAgentSystem;
 
   constructor(config?: {
     enableOrchestration?: boolean;
@@ -79,7 +95,7 @@ export class AgenticPM {
     costBudget?: number;
     latencyTarget?: number;
   }) {
-    this.system = new UnifiedAgentSystem({
+    this.system = new EnhancedUnifiedAgentSystem({
       orchestration: { enabled: config?.enableOrchestration ?? true },
       metrics: { 
         enabled: config?.enableMetrics ?? true,
@@ -108,6 +124,17 @@ export class AgenticPM {
   }
 
   /**
+   * Enhanced quick analysis with natural language prompt
+   */
+  async quickAnalysisWithPrompt(userPrompt: string, documentFiles?: Array<{
+    filename: string;
+    content: string;
+    contentType: string;
+  }>) {
+    return await this.system.quickAnalysisWithPrompt(userPrompt, documentFiles);
+  }
+
+  /**
    * Standard analysis - Balanced analysis with good depth
    */
   async standardAnalysis(productConcept: {
@@ -133,6 +160,17 @@ export class AgenticPM {
     timeline?: string;
   }) {
     return await this.system.comprehensiveAnalysis(productConcept);
+  }
+
+  /**
+   * Enhanced comprehensive analysis with natural language prompt and document context
+   */
+  async comprehensiveAnalysisWithPrompt(userPrompt: string, documentFiles?: Array<{
+    filename: string;
+    content: string;
+    contentType: string;
+  }>) {
+    return await this.system.comprehensiveAnalysisWithPrompt(userPrompt, documentFiles);
   }
 
   /**
@@ -168,6 +206,25 @@ export class AgenticPM {
    */
   cleanup(olderThanHours: number = 24) {
     return this.system.cleanup(olderThanHours);
+  }
+
+  /**
+   * Document session management
+   */
+  createDocumentSession(): string {
+    return this.system.createDocumentSession();
+  }
+
+  async addDocumentToSession(sessionId: string, filename: string, content: string, contentType: string = 'text/plain'): Promise<string> {
+    return await this.system.addDocumentToSession(sessionId, filename, content, contentType);
+  }
+
+  getSessionDocuments(sessionId: string) {
+    return this.system.getSessionDocuments(sessionId);
+  }
+
+  clearDocumentSession(sessionId: string): boolean {
+    return this.system.clearDocumentSession(sessionId);
   }
 
   /**
