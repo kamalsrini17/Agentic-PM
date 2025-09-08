@@ -66,10 +66,14 @@ export class AgenticError extends Error {
     const messages = {
       [ErrorCode.VALIDATION_ERROR]: 'Please check your input and try again.',
       [ErrorCode.INVALID_INPUT]: 'The provided input is invalid. Please review and correct.',
+      [ErrorCode.MISSING_REQUIRED_FIELD]: 'Required field is missing. Please provide all required information.',
       [ErrorCode.API_ERROR]: 'There was an issue with the service. Please try again.',
       [ErrorCode.RATE_LIMIT_EXCEEDED]: 'Too many requests. Please wait a moment and try again.',
+      [ErrorCode.AUTHENTICATION_ERROR]: 'Authentication failed. Please check your API keys.',
+      [ErrorCode.AUTHORIZATION_ERROR]: 'Authorization failed. Please check your permissions.',
       [ErrorCode.OPENAI_ERROR]: 'AI service is temporarily unavailable. Please try again.',
       [ErrorCode.OPENAI_RATE_LIMIT]: 'AI service rate limit reached. Please wait and try again.',
+      [ErrorCode.OPENAI_QUOTA_EXCEEDED]: 'AI service quota exceeded. Please check your billing.',
       [ErrorCode.MARKET_RESEARCH_ERROR]: 'Market research analysis failed. Please try again.',
       [ErrorCode.COMPETITIVE_ANALYSIS_ERROR]: 'Competitive analysis failed. Please try again.',
       [ErrorCode.PROTOTYPE_GENERATION_ERROR]: 'Prototype generation failed. Please try again.',
@@ -77,6 +81,7 @@ export class AgenticError extends Error {
       [ErrorCode.INTERNAL_ERROR]: 'An internal error occurred. Please contact support.',
       [ErrorCode.TIMEOUT_ERROR]: 'Request timed out. Please try again.',
       [ErrorCode.NETWORK_ERROR]: 'Network error. Please check your connection and try again.',
+      [ErrorCode.FILE_SYSTEM_ERROR]: 'File system error. Please check permissions and try again.',
       [ErrorCode.INSUFFICIENT_DATA]: 'Insufficient data to complete the analysis.',
       [ErrorCode.PROCESSING_ERROR]: 'Processing failed. Please try again.',
       [ErrorCode.GENERATION_FAILED]: 'Content generation failed. Please try again.'

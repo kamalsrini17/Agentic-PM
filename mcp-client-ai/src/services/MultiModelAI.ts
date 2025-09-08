@@ -87,7 +87,7 @@ export interface MultiModelResponse {
 
 export class MultiModelAI {
   private openai: OpenAI;
-  private anthropic: Anthropic;
+  private anthropic: Anthropic | null = null;
   private logger: Logger;
 
   constructor() {
@@ -221,8 +221,8 @@ export class MultiModelAI {
         model: config.model,
         messages,
         temperature: request.temperature ?? config.temperature,
-        max_tokens: request.maxTokens ?? config.maxTokens,
-        timeout: config.timeout
+        max_tokens: request.maxTokens ?? config.maxTokens
+        // Note: timeout is handled by OpenAI client configuration
       });
 
       const latency = Date.now() - startTime;
