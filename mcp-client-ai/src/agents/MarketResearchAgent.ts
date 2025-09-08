@@ -196,7 +196,7 @@ Format as JSON with numerical values and clear reasoning.
           model: 'gpt-4',
           messages: [{ role: 'user', content: prompt }],
           temperature: 0.3,
-          timeout: 30000 // 30 second timeout
+          // Note: timeout handled by OpenAI client configuration
         });
 
         const content = response.choices[0].message.content;

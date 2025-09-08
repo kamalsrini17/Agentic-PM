@@ -152,6 +152,7 @@ export class CompetitiveLandscapeAgent {
     }
 
     const validatedInput = validationResult.data!;
+    const { productTitle, productDescription, targetMarket } = validatedInput;
 
     // Execute competitive analysis in parallel
     const [

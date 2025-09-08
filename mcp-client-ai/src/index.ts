@@ -53,7 +53,6 @@ export type {
 } from './evaluation/OptimizedEvalsAgent';
 
 // Legacy Exports (for backward compatibility)
-// export { AgenticPMClient } from './agenticClient'; // Temporarily disabled due to compilation issues
 export { AgenticPMOrchestrator } from './agents/AgenticPMOrchestrator';
 export { EvaluationAgent } from './agents/EvaluationAgent';
 export { AgenticPMEvaluationFramework } from './evaluation/MetricsFramework';
