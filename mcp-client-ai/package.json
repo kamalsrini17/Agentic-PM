@@ -1,13 +1,32 @@
 {
-  "name": "mcp-client-ai",
+  "name": "agentic-pm",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "AI-powered Product Management framework with automated PRD generation, market research, and prototype creation",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "keywords": ["product-management", "ai", "prd", "market-research", "prototype", "openai", "claude"],
+  "author": "Agentic PM Team",
+  "license": "MIT",
+  "homepage": "https://github.com/kamalsrini17/Agentic-PM#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kamalsrini17/Agentic-PM.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kamalsrini17/Agentic-PM/issues"
+  },
   "scripts": {
     "start": "ts-node src/index.ts",
     "build": "tsc",
     "demo": "ts-node src/demo/quickDemo.ts",
     "demo:enhanced": "ts-node src/demo/enhancedPromptDemo.ts",
-    "test": "ts-node src/integration/SystemTests.ts"
+    "demo:simple": "ts-node src/demo/simpleDemo.ts",
+    "example": "ts-node src/examples/genericProductExample.ts",
+    "test": "ts-node src/integration/SystemTests.ts",
+    "test-api": "ts-node test-api-connection.ts",
+    "dev": "ts-node --watch src/index.ts",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.61.0",

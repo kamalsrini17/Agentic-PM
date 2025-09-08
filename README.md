@@ -43,12 +43,7 @@ Agentic PM is an innovative AI-powered framework that revolutionizes product man
 
 2. **Install dependencies**
    ```bash
-   # For the client
    cd mcp-client-ai
-   npm install
-   
-   # For the server (if using)
-   cd ../mcp-server
    npm install
    ```
 
@@ -91,6 +86,14 @@ cd mcp-client-ai
 npm run demo
 ```
 
+Or try other available demos:
+```bash
+npm run demo:enhanced  # Enhanced demo with prompt processing
+npm run demo:simple    # Simple demo
+npm run example        # Generic product example
+npm run test-api       # Test API connectivity
+```
+
 
 ## 📁 Project Structure
 
@@ -102,16 +105,14 @@ Agentic-PM/
 │   │   ├── services/          # Core services (AI, API)
 │   │   ├── utils/             # Utility functions
 │   │   ├── validation/        # Input validation schemas
+│   │   ├── orchestration/     # Workflow orchestration
+│   │   ├── metrics/           # Performance monitoring
+│   │   ├── evaluation/        # AI model evaluation
+│   │   ├── integration/       # System integration
 │   │   └── demo/              # Demo applications
 │   ├── package.json
 │   └── tsconfig.json
-├── mcp-server/                 # Optional server component
-│   ├── src/
-│   │   ├── routes/           # API routes
-│   │   ├── models/           # Data models
-│   │   └── store/            # Data persistence
-│   └── package.json
-├── Architecture_for_blog.md    # Detailed architecture documentation
+├── LICENSE                     # MIT License
 └── README.md                   # This file
 ```
 
@@ -176,6 +177,10 @@ npm run test:integration
 # E2E tests
 npm run test:e2e
 ```
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🤝 Contributing
 
