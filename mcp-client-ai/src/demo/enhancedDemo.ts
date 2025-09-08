@@ -128,7 +128,7 @@ async function demonstrateSystemTesting(): Promise<void> {
     
     if (testResults.recommendations.length > 0) {
       console.log('\n💡 Recommendations:');
-      testResults.recommendations.forEach(rec => console.log(`   • ${rec}`));
+      testResults.recommendations.forEach((rec: any) => console.log(`   • ${rec}`));
     }
 
   } catch (error) {

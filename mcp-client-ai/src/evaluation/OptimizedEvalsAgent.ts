@@ -156,7 +156,7 @@ export class OptimizedEvalsAgent {
         
         this.logger.info('Cache hit - returning cached result', {
           evaluationId,
-          cacheAge: Date.now() - cacheResult.timestamp.getTime()
+          cacheAge: Date.now() - (cacheResult as any).timestamp?.getTime() || 0
         }, 'OptimizedEvalsAgent');
         
         return {

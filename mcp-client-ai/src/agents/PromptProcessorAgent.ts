@@ -116,14 +116,36 @@ export class PromptProcessorAgent {
       // Step 4: Generate structured concept
       const structuredConcept = await this.generateStructuredConcept(input, initialAnalysis, domain, inferredFeatures);
       
+      // Create complete processed concept for further analysis
+      const tempProcessedConcept: ProcessedProductConcept = {
+        title: structuredConcept.title,
+        description: structuredConcept.description,
+        domain,
+        targetMarket: structuredConcept.targetMarket,
+        keyFeatures: inferredFeatures,
+        goals: structuredConcept.goals,
+        constraints: structuredConcept.constraints,
+        inspirations: [],
+        clarificationNeeded: [],
+        confidenceScore: 0,
+        suggestedAnalysisType: 'standard',
+        extractedKeywords: [],
+        metadata: {
+          processedAt: new Date(),
+          processingTime: 0,
+          modelUsed: 'gpt-4',
+          promptLength: input.rawPrompt.length
+        }
+      };
+      
       // Step 5: Identify clarification needs
-      const clarificationNeeded = this.identifyClarificationNeeds(structuredConcept);
+      const clarificationNeeded = this.identifyClarificationNeeds(tempProcessedConcept);
       
       // Step 6: Calculate confidence score
-      const confidenceScore = this.calculateConfidenceScore(structuredConcept, input);
+      const confidenceScore = this.calculateConfidenceScore(tempProcessedConcept, input);
       
       // Step 7: Suggest analysis type
-      const suggestedAnalysisType = this.suggestAnalysisType(structuredConcept, input);
+      const suggestedAnalysisType = this.suggestAnalysisType(tempProcessedConcept, input);
 
       const processingTime = Date.now() - startTime;
       

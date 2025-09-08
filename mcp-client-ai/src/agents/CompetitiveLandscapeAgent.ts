@@ -145,7 +145,7 @@ export class CompetitiveLandscapeAgent {
     // Validate input
     const validationResult = validateInput(CompetitiveLandscapeInputSchema, input, 'Competitive Landscape Input');
     if (!validationResult.success) {
-      this.logger.error('Input validation failed', validationResult.error, {
+      this.logger.error('Input validation failed', validationResult.error as any, {
         input: input
       }, 'CompetitiveLandscapeAgent');
       throw handleZodError(validationResult.error!.details!, 'Competitive Landscape Input');

@@ -455,7 +455,8 @@ export class AgenticPMEvaluationFramework {
   private assessInsightNovelty(document: any): number { return 65; }
   private assessCompetitiveAccuracy(document: any): number { return 75; }
   private calculateOverallQuality(scores: any): number { 
-    return Object.values(scores).reduce((a: any, b: any) => a + b, 0) / Object.keys(scores).length;
+    const values = Object.values(scores) as number[];
+    return values.reduce((a: number, b: number) => a + b, 0) / Object.keys(scores).length;
   }
   private calculateQualityTrend(userId: string): 'improving' | 'stable' | 'declining' { 
     return 'improving'; 

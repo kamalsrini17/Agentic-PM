@@ -90,7 +90,7 @@ export class EnhancedUnifiedAgentSystem extends UnifiedAgentSystem {
   private promptProcessor: PromptProcessorAgent;
   private documentStore: SessionDocumentStore;
   private documentParser: SimpleDocumentParser;
-  private logger: Logger;
+  private enhancedLogger: Logger;
 
   constructor(config?: any) {
     super(config);
@@ -98,9 +98,9 @@ export class EnhancedUnifiedAgentSystem extends UnifiedAgentSystem {
     this.promptProcessor = new PromptProcessorAgent();
     this.documentStore = new SessionDocumentStore();
     this.documentParser = new SimpleDocumentParser();
-    this.logger = Logger.getInstance();
+    this.enhancedLogger = Logger.getInstance();
 
-    this.logger.info('Enhanced Unified Agent System initialized', {
+    this.enhancedLogger.info('Enhanced Unified Agent System initialized', {
       hasPromptProcessor: true,
       hasDocumentStore: true,
       hasDocumentParser: true
@@ -115,8 +115,8 @@ export class EnhancedUnifiedAgentSystem extends UnifiedAgentSystem {
     const analysisId = `enhanced_${Date.now()}_${Math.random().toString(36).substr(2, 8)}`;
     const startTime = Date.now();
 
-    this.logger.setContext(analysisId);
-    this.logger.info('Starting enhanced analysis with prompt and context', {
+    this.enhancedLogger.setContext(analysisId);
+    this.enhancedLogger.info('Starting enhanced analysis with prompt and context', {
       hasPrompt: !!request.userPrompt,
       hasDocuments: !!request.documentFiles?.length,
       hasSession: !!request.sessionId
@@ -172,7 +172,7 @@ export class EnhancedUnifiedAgentSystem extends UnifiedAgentSystem {
 
       const totalDuration = Date.now() - startTime;
 
-      this.logger.info('Enhanced analysis completed', {
+      this.enhancedLogger.info('Enhanced analysis completed', {
         analysisId,
         duration: totalDuration,
         isPersonalized: enhancedResult.personalization.isPersonalized,
@@ -185,7 +185,7 @@ export class EnhancedUnifiedAgentSystem extends UnifiedAgentSystem {
     } catch (error) {
       const duration = Date.now() - startTime;
       
-      this.logger.error('Enhanced analysis failed', error as Error, {
+      this.enhancedLogger.error('Enhanced analysis failed', error as Error, {
         analysisId,
         duration,
         prompt: request.userPrompt.substring(0, 100)
@@ -240,7 +240,7 @@ export class EnhancedUnifiedAgentSystem extends UnifiedAgentSystem {
         // Update document with parsed data
         this.documentStore.updateDocumentParsedData(documentId, parsedContent);
 
-        this.logger.info('Document processed and stored', {
+        this.enhancedLogger.info('Document processed and stored', {
           sessionId,
           documentId,
           filename: file.filename,
@@ -249,7 +249,7 @@ export class EnhancedUnifiedAgentSystem extends UnifiedAgentSystem {
         }, 'EnhancedUnifiedAgentSystem');
 
       } catch (error) {
-        this.logger.warn('Failed to process document', {
+        this.enhancedLogger.warn('Failed to process document', {
           filename: file.filename,
           error: (error as Error).message
         }, 'EnhancedUnifiedAgentSystem');

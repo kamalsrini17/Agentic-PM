@@ -105,7 +105,7 @@ export class MarketResearchAgent {
     // Validate input
     const validationResult = validateInput(MarketResearchInputSchema, input, 'Market Research Input');
     if (!validationResult.success) {
-      this.logger.error('Input validation failed', validationResult.error, {
+      this.logger.error('Input validation failed', validationResult.error as any, {
         input: input
       }, 'MarketResearchAgent');
       throw handleZodError(validationResult.error!.details!, 'Market Research Input');

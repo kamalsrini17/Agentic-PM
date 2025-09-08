@@ -270,7 +270,7 @@ export class MetricsCollector extends EventEmitter {
   getMetricData(
     metricName: string,
     timeRange: string = '1h',
-    aggregation: 'sum' | 'avg' | 'min' | 'max' | 'count' = 'avg',
+    aggregation: 'sum' | 'avg' | 'min' | 'max' | 'count' | 'rate' = 'avg',
     filters: Record<string, string> = {}
   ): MetricDataPoint[] {
     const series = this.metrics.get(metricName);
@@ -680,7 +680,7 @@ export class MetricsCollector extends EventEmitter {
 
   private aggregateDataPoints(
     dataPoints: MetricDataPoint[],
-    aggregation: 'sum' | 'avg' | 'min' | 'max' | 'count',
+    aggregation: 'sum' | 'avg' | 'min' | 'max' | 'count' | 'rate',
     buckets: number
   ): MetricDataPoint[] {
     if (dataPoints.length <= buckets) return dataPoints;
@@ -708,6 +708,19 @@ export class MetricsCollector extends EventEmitter {
           break;
         case 'count':
           aggregatedValue = values.length;
+          break;
+        case 'rate':
+          // Calculate rate as change per unit time
+          if (values.length > 1) {
+            const firstValue = values[0];
+            const lastValue = values[values.length - 1];
+            aggregatedValue = lastValue - firstValue;
+          } else {
+            aggregatedValue = values[0] || 0;
+          }
+          break;
+        default:
+          aggregatedValue = values.reduce((a, b) => a + b, 0) / values.length;
           break;
       }
 

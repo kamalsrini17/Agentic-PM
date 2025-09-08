@@ -70,10 +70,13 @@ export { SessionDocumentStore } from './storage/SessionDocumentStore';
 export { SimpleDocumentParser } from './parsers/SimpleDocumentParser';
 export type {
   UserPromptInput,
-  ProcessedProductConcept,
+  ProcessedProductConcept
+} from './agents/PromptProcessorAgent';
+
+export type {
   UserDocument,
   DocumentContext
-} from './agents/PromptProcessorAgent';
+} from './storage/SessionDocumentStore';
 
 // ============================================================================
 // QUICK START INTERFACE
@@ -302,7 +305,7 @@ export const AgenticPMPresets = {
 /**
  * Run system tests
  */
-export async function runSystemTests(testType: 'quick' | 'full' | 'performance' = 'quick') {
+export async function runSystemTests(testType: 'quick' | 'full' | 'performance' = 'quick'): Promise<any> {
   const { SystemTests } = await import('./integration/SystemTests');
   
   switch (testType) {

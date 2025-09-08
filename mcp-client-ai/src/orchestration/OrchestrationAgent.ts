@@ -336,6 +336,9 @@ export class OrchestrationAgent {
     const workflow: WorkflowDefinition = {
       ...customizedWorkflow,
       id: workflowId,
+      name: customizedWorkflow.name || `Workflow_${workflowId}`,
+      description: customizedWorkflow.description || `Orchestrated workflow for analysis`,
+      steps: customizedWorkflow.steps || [],
       version: '1.0',
       defaultTimeout: 300000,
       maxConcurrentSteps: 3,

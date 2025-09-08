@@ -1092,14 +1092,14 @@ export class MetricsAgent {
         condition: 'greater_than' as const,
         threshold: 5000,
         timeWindow: 10,
-        severity: 'warning' as const
+        severity: 'medium' as const
       },
       {
         metricName: BUSINESS_METRICS.USER_RETENTION_7D,
         condition: 'less_than' as const,
         threshold: 30,
         timeWindow: 60,
-        severity: 'warning' as const
+        severity: 'medium' as const
       }
     ];
 
