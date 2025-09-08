@@ -165,7 +165,7 @@ export class PromptProcessorAgent {
         metadata: {
           processedAt: new Date(),
           processingTime,
-          modelUsed: 'gpt-4-turbo-preview',
+          modelUsed: 'gpt-4',
           promptLength: input.rawPrompt.length
         }
       };
@@ -294,12 +294,12 @@ Focus on:
 
     const response = await this.multiModelAI.queryMultipleModels({
       prompt: analysisPrompt,
-      models: ['gpt-4-turbo-preview'],
+      models: ['gpt-4'],
       temperature: 0.3,
       maxTokens: 1000
     });
 
-    const content = response.responses['gpt-4-turbo-preview']?.content;
+    const content = response.responses['gpt-4']?.content;
     if (!content) {
       throw new Error('Failed to get initial analysis from AI model');
     }
@@ -409,12 +409,12 @@ Make it specific to the ${domain} domain and ensure the target market is well-de
 
     const response = await this.multiModelAI.queryMultipleModels({
       prompt: structurePrompt,
-      models: ['gpt-4-turbo-preview'],
+      models: ['gpt-4'],
       temperature: 0.3,
       maxTokens: 800
     });
 
-    const content = response.responses['gpt-4-turbo-preview']?.content;
+    const content = response.responses['gpt-4']?.content;
     if (!content) {
       throw new Error('Failed to generate structured concept');
     }
