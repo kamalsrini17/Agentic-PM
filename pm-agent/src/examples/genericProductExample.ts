@@ -1,4 +1,4 @@
-import { AgenticPMOrchestrator } from '../agents/AgenticPMOrchestrator';
+import { AgenticPM } from '../index';
 import { Logger } from '../utils/errorHandling';
 import 'dotenv/config';
 
@@ -144,83 +144,65 @@ const exampleProducts = {
 
 async function demonstrateGenericAgenticPM() {
   const logger = Logger.getInstance();
-  const orchestrator = new AgenticPMOrchestrator();
+  const agentic = new AgenticPM();
 
   console.log('🚀 Agentic PM Framework - Generic Product Analysis Demo');
   console.log('=' .repeat(60));
 
-  // Test integrations first
-  console.log('\n🔧 Testing API Integrations...');
-  const integrationTests = await orchestrator.testIntegrations();
-  console.log('Integration Results:', integrationTests);
+  try {
+    // Test system health first
+    console.log('\n🔧 Checking System Health...');
+    const health = await agentic.getSystemHealth();
+    console.log('System Status:', health.overall.toUpperCase());
 
-  const availableModels = orchestrator.getAvailableEvaluationModels();
-  console.log(`\n🤖 Available AI Models: ${availableModels.join(', ')}`);
-
-  if (availableModels.length === 0) {
-    console.log('❌ No AI models available. Please configure API keys in .env file');
-    console.log('📝 Copy .env.example to .env and add your API keys');
-    return;
-  }
-
-  // Demonstrate with different product types
-  const productExamples = Object.entries(exampleProducts);
-  
-  for (const [productType, productConcept] of productExamples.slice(0, 2)) { // Test first 2 products
-    console.log(`\n📦 Analyzing Product: ${productConcept.title} (${productType})`);
-    console.log('-'.repeat(50));
-
-    try {
-      const workflowRequest = {
-        productConcept,
-        workflowOptions: {
-          includeMarketResearch: true,
-          includeCompetitiveAnalysis: true,
-          includePrototype: false, // Skip prototype for demo speed
-          includeEvaluation: true,
-          evaluationModels: availableModels.slice(0, 2), // Use first 2 available models
-          exportFormat: 'markdown' as const
-        },
-        userPreferences: {
-          detailLevel: 'comprehensive' as const,
-          focusAreas: ['market-opportunity', 'competitive-advantage'],
-          constraints: ['budget-conscious', 'fast-to-market']
-        }
-      };
-
-      const startTime = Date.now();
-      const result = await orchestrator.runCompleteWorkflow(workflowRequest);
-      const duration = Date.now() - startTime;
-
-      console.log(`✅ Analysis completed in ${duration}ms`);
-      console.log(`📊 Executive Summary Preview:`);
-      console.log(result.executiveSummary.substring(0, 300) + '...');
-      
-      if (result.evaluationReport) {
-        console.log(`🎯 Evaluation Score: ${result.evaluationReport.evaluationSummary.overallScore}/100`);
-        console.log(`📈 Recommendation: ${result.evaluationReport.evaluationSummary.recommendation}`);
-      }
-
-      console.log(`📁 Workflow Metadata:`);
-      console.log(`   - Steps Completed: ${result.workflowMetadata.stepsCompleted.join(', ')}`);
-      console.log(`   - Duration: ${result.workflowMetadata.duration}ms`);
-      console.log(`   - Errors: ${result.workflowMetadata.errors.length}`);
-      console.log(`   - Warnings: ${result.workflowMetadata.warnings.length}`);
-
-    } catch (error) {
-      console.error(`❌ Analysis failed for ${productConcept.title}:`, (error as Error).message);
+    if (health.overall === 'critical') {
+      console.log('❌ System is not healthy. Please check configuration');
+      return;
     }
-  }
 
-  console.log('\n🎉 Generic Agentic PM Framework Demo Complete!');
-  console.log('\n💡 Key Features Demonstrated:');
-  console.log('   ✓ Generic product concept handling (any industry)');
-  console.log('   ✓ Multi-model AI evaluation (GPT-4, Claude, etc.)');
-  console.log('   ✓ Comprehensive input validation');
-  console.log('   ✓ Error handling and graceful degradation');
-  console.log('   ✓ Structured logging and monitoring');
-  console.log('   ✓ Configurable workflow options');
-  console.log('   ✓ Document generation and export');
+    // Demonstrate with different product types
+    const productExamples = Object.entries(exampleProducts);
+    
+    for (const [productType, productConcept] of productExamples.slice(0, 2)) { // Test first 2 products
+      console.log(`\n📦 Analyzing Product: ${productConcept.title} (${productType})`);
+      console.log('-'.repeat(50));
+
+      try {
+        const startTime = Date.now();
+        const result = await agentic.comprehensiveAnalysis(productConcept);
+        const duration = Date.now() - startTime;
+
+        console.log(`✅ Analysis completed in ${duration}ms`);
+        console.log(`📊 Overall Score: ${result.summary.overallScore}/100`);
+        console.log(`💰 Total Cost: $${result.summary.totalCost.toFixed(4)}`);
+        console.log(`⚡ Efficiency Score: ${result.summary.efficiencyScore}/100`);
+        
+        if (result.recommendations.length > 0) {
+          console.log(`💡 Top Recommendations:`);
+          result.recommendations.slice(0, 3).forEach((rec, i) => {
+            console.log(`   ${i + 1}. [${rec.priority.toUpperCase()}] ${rec.title}`);
+          });
+        }
+
+        console.log(`🏗️  Systems Used: ${result.metadata.systemsUsed.join(', ')}`);
+
+      } catch (error) {
+        console.error(`❌ Analysis failed for ${productConcept.title}:`, (error as Error).message);
+      }
+    }
+
+    console.log('\n🎉 Generic Agentic PM Framework Demo Complete!');
+    console.log('\n💡 Key Features Demonstrated:');
+    console.log('   ✓ Generic product concept handling (any industry)');
+    console.log('   ✓ Unified agent system with orchestration');
+    console.log('   ✓ Cost and latency optimization');
+    console.log('   ✓ Real-time system health monitoring');
+    console.log('   ✓ Comprehensive analysis and recommendations');
+    console.log('   ✓ Multi-system integration');
+
+  } finally {
+    await agentic.shutdown();
+  }
 }
 
 // ============================================================================
@@ -228,7 +210,7 @@ async function demonstrateGenericAgenticPM() {
 // ============================================================================
 
 export async function analyzeSpecificProduct(productKey: keyof typeof exampleProducts) {
-  const orchestrator = new AgenticPMOrchestrator();
+  const agentic = new AgenticPM();
   const productConcept = exampleProducts[productKey];
 
   if (!productConcept) {
@@ -238,24 +220,11 @@ export async function analyzeSpecificProduct(productKey: keyof typeof examplePro
   console.log(`\n🔍 Detailed Analysis: ${productConcept.title}`);
   console.log('='.repeat(50));
 
-  const workflowRequest = {
-    productConcept,
-    workflowOptions: {
-      includeMarketResearch: true,
-      includeCompetitiveAnalysis: true,
-      includePrototype: true,
-      includeEvaluation: true,
-      evaluationModels: orchestrator.getAvailableEvaluationModels(),
-      exportFormat: 'pdf' as const
-    },
-    userPreferences: {
-      detailLevel: 'comprehensive' as const,
-      focusAreas: ['market-opportunity', 'competitive-advantage', 'technical-feasibility'],
-      constraints: []
-    }
-  };
-
-  return await orchestrator.runCompleteWorkflow(workflowRequest);
+  try {
+    return await agentic.comprehensiveAnalysis(productConcept);
+  } finally {
+    await agentic.shutdown();
+  }
 }
 
 // ============================================================================
@@ -263,24 +232,16 @@ export async function analyzeSpecificProduct(productKey: keyof typeof examplePro
 // ============================================================================
 
 export async function analyzeCustomProduct(customProductConcept: any) {
-  const orchestrator = new AgenticPMOrchestrator();
+  const agentic = new AgenticPM();
 
   console.log(`\n🎨 Custom Product Analysis: ${customProductConcept.title}`);
   console.log('='.repeat(50));
 
-  const workflowRequest = {
-    productConcept: customProductConcept,
-    workflowOptions: {
-      includeMarketResearch: true,
-      includeCompetitiveAnalysis: true,
-      includePrototype: false,
-      includeEvaluation: true,
-      evaluationModels: orchestrator.getAvailableEvaluationModels().slice(0, 2),
-      exportFormat: 'markdown' as const
-    }
-  };
-
-  return await orchestrator.runCompleteWorkflow(workflowRequest);
+  try {
+    return await agentic.standardAnalysis(customProductConcept);
+  } finally {
+    await agentic.shutdown();
+  }
 }
 
 // Run the demonstration if this file is executed directly

@@ -5,17 +5,14 @@
 
 // Core System
 export { UnifiedAgentSystem } from './integration/UnifiedAgentSystem';
-export { EnhancedUnifiedAgentSystem } from './integration/EnhancedUnifiedAgentSystem';
 export type { 
   ComprehensiveAnalysisRequest, 
   ComprehensiveAnalysisResult,
   SystemHealthReport,
-  UnifiedSystemConfig 
-} from './integration/UnifiedAgentSystem';
-export type {
+  UnifiedSystemConfig,
   EnhancedAnalysisRequest,
   EnhancedAnalysisResult
-} from './integration/EnhancedUnifiedAgentSystem';
+} from './integration/UnifiedAgentSystem';
 
 // Orchestration Framework
 export { WorkflowEngine } from './orchestration/WorkflowEngine';
@@ -52,10 +49,7 @@ export type {
   ModelPerformanceProfile
 } from './evaluation/OptimizedEvalsAgent';
 
-// Legacy Exports (for backward compatibility)
-export { AgenticPMOrchestrator } from './agents/AgenticPMOrchestrator';
-export { EvaluationAgent } from './agents/EvaluationAgent';
-export { AgenticPMEvaluationFramework } from './evaluation/MetricsFramework';
+// Legacy Exports (for backward compatibility) - removed redundant evaluation systems
 
 // Utilities
 export { Logger, AgenticError, ErrorCode } from './utils/errorHandling';
@@ -82,13 +76,13 @@ export type {
 // QUICK START INTERFACE
 // ============================================================================
 
-import { EnhancedUnifiedAgentSystem } from './integration/EnhancedUnifiedAgentSystem';
+import { UnifiedAgentSystem } from './integration/UnifiedAgentSystem';
 
 /**
  * Quick Start - Create and configure a unified agent system
  */
 export class AgenticPM {
-  private system: EnhancedUnifiedAgentSystem;
+  private system: UnifiedAgentSystem;
 
   constructor(config?: {
     enableOrchestration?: boolean;
@@ -97,7 +91,7 @@ export class AgenticPM {
     costBudget?: number;
     latencyTarget?: number;
   }) {
-    this.system = new EnhancedUnifiedAgentSystem({
+    this.system = new UnifiedAgentSystem({
       orchestration: { enabled: config?.enableOrchestration ?? true },
       metrics: { 
         enabled: config?.enableMetrics ?? true,

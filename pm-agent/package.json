@@ -18,12 +18,9 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "build": "tsc",
-    "demo": "ts-node src/demo/quickDemo.ts",
-    "demo:enhanced": "ts-node src/demo/enhancedPromptDemo.ts",
-    "demo:simple": "ts-node src/demo/simpleDemo.ts",
+    "demo": "ts-node src/demo/demo.ts",
     "example": "ts-node src/examples/genericProductExample.ts",
     "test": "ts-node src/integration/SystemTests.ts",
-    "test-api": "ts-node test-api-connection.ts",
     "dev": "ts-node --watch src/index.ts",
     "clean": "rm -rf dist",
     "prepublishOnly": "npm run clean && npm run build"

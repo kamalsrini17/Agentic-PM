@@ -114,7 +114,7 @@ const WORKFLOW_TEMPLATES: Record<string, Partial<WorkflowDefinition>> = {
       {
         id: 'evaluation',
         name: 'Multi-Model Evaluation',
-        agentType: 'EvaluationAgent',
+        agentType: 'OptimizedEvalsAgent',
         dependencies: ['market-research', 'competitive-analysis', 'prd-generation'],
         timeout: 300000,
         retryPolicy: { maxRetries: 1, backoffMs: 5000, exponential: false },
@@ -154,7 +154,7 @@ const WORKFLOW_TEMPLATES: Record<string, Partial<WorkflowDefinition>> = {
       {
         id: 'quick-evaluation',
         name: 'Quick Evaluation',
-        agentType: 'EvaluationAgent',
+        agentType: 'OptimizedEvalsAgent',
         dependencies: ['quick-market-scan', 'competitor-overview'],
         timeout: 180000,
         retryPolicy: { maxRetries: 1, backoffMs: 3000, exponential: false },
@@ -216,7 +216,7 @@ const WORKFLOW_TEMPLATES: Record<string, Partial<WorkflowDefinition>> = {
       {
         id: 'multi-model-evaluation',
         name: 'Multi-Model Evaluation',
-        agentType: 'EvaluationAgent',
+        agentType: 'OptimizedEvalsAgent',
         dependencies: ['comprehensive-market-research', 'detailed-competitive-analysis', 'advanced-prd-generation'],
         timeout: 600000,
         retryPolicy: { maxRetries: 2, backoffMs: 10000, exponential: true },
@@ -659,12 +659,12 @@ Respond with just the template key that best matches the requirements.
         isAvailable: true
       },
       {
-        agentType: 'EvaluationAgent',
-        capabilities: ['quality-assessment', 'multi-model-evaluation', 'scoring'],
-        costPerOperation: 0.12,
-        avgLatencyMs: 40000,
-        successRate: 0.96,
-        maxConcurrency: 1,
+        agentType: 'OptimizedEvalsAgent',
+        capabilities: ['quality-assessment', 'multi-model-evaluation', 'scoring', 'cost-optimization'],
+        costPerOperation: 0.08, // More cost-effective than legacy EvaluationAgent
+        avgLatencyMs: 30000,    // Faster due to caching and optimization
+        successRate: 0.98,      // Higher success rate
+        maxConcurrency: 2,      // Better concurrency support
         isAvailable: true
       }
     ];

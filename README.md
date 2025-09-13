@@ -43,13 +43,13 @@ Agentic PM is an innovative AI-powered framework that revolutionizes product man
 
 2. **Install dependencies**
    ```bash
-   cd mcp-client-ai
+   cd pm-agent
    npm install
    ```
 
 3. **Set up environment variables**
    
-   Create a `.env` file in the `mcp-client-ai` directory:
+   Create a `.env` file in the `pm-agent` directory:
    ```env
    OPENAI_API_KEY=your_openai_api_key_here
    ANTHROPIC_API_KEY=your_anthropic_api_key_here
@@ -82,16 +82,14 @@ console.log(productPackage);
 ### Running the Demo
 
 ```bash
-cd mcp-client-ai
+cd pm-agent
 npm run demo
 ```
 
-Or try other available demos:
+Or try other available commands:
 ```bash
-npm run demo:enhanced  # Enhanced demo with prompt processing
-npm run demo:simple    # Simple demo
 npm run example        # Generic product example
-npm run test-api       # Test API connectivity
+npm test              # Run system tests
 ```
 
 
@@ -99,7 +97,7 @@ npm run test-api       # Test API connectivity
 
 ```
 Agentic-PM/
-├── mcp-client-ai/              # Main client application
+├── pm-agent/                   # Main PM agent application
 │   ├── src/
 │   │   ├── agents/            # AI agent implementations
 │   │   ├── services/          # Core services (AI, API)
