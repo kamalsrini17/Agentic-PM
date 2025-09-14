@@ -59,12 +59,20 @@ export interface PricingRecommendation {
 // ============================================================================
 
 export class PricingAgent {
-  private multiModelAI: MultiModelAI;
+  private multiModelAI: MultiModelAI | null;
   private logger: Logger;
 
   constructor() {
-    this.multiModelAI = new MultiModelAI();
     this.logger = Logger.getInstance();
+    
+    try {
+      this.multiModelAI = new MultiModelAI();
+    } catch (error) {
+      this.logger.warn('MultiModelAI initialization failed, running in fallback mode', {
+        error: (error as Error).message
+      }, 'PricingAgent');
+      this.multiModelAI = null;
+    }
   }
 
   // ============================================================================
@@ -81,11 +89,22 @@ export class PricingAgent {
     }, 'PricingAgent');
 
     try {
-      // Step 1: Analyze PRD for pricing-relevant features
-      const pricingContext = await this.analyzePRDForPricing(request);
+      let recommendations: Omit<PricingRecommendation, 'formattedRecommendation'>;
 
-      // Step 2: Generate comprehensive pricing recommendations
-      const recommendations = await this.generateComprehensivePricingAnalysis(pricingContext, request);
+      if (this.multiModelAI) {
+        // Step 1: Analyze PRD for pricing-relevant features
+        const pricingContext = await this.analyzePRDForPricing(request);
+
+        // Step 2: Generate comprehensive pricing recommendations
+        recommendations = await this.generateComprehensivePricingAnalysis(pricingContext, request);
+      } else {
+        // Fallback mode without API calls
+        this.logger.info('Using fallback pricing recommendations (no API available)', {
+          productTitle: request.productConcept.title
+        }, 'PricingAgent');
+        
+        recommendations = this.generateFallbackRecommendations(request.productConcept);
+      }
 
       // Step 3: Format using the provided template
       const formattedRecommendation = this.formatPricingRecommendation(recommendations);
@@ -123,6 +142,10 @@ export class PricingAgent {
   // ============================================================================
 
   private async analyzePRDForPricing(request: PricingAnalysisRequest): Promise<any> {
+    if (!this.multiModelAI) {
+      throw new Error('MultiModelAI not available for PRD analysis');
+    }
+
     const analysisPrompt = `
 As a pricing strategy expert familiar with Kyle Poyar and OpenView research, analyze this PRD for pricing opportunities:
 
@@ -144,7 +167,7 @@ Provide a structured analysis focusing on pricing-relevant insights.
 `;
 
     const response = await withRetry(async () => {
-      return await this.multiModelAI.queryMultipleModels({
+      return await this.multiModelAI!.queryMultipleModels({
         prompt: analysisPrompt,
         models: ['gpt-4'],
         temperature: 0.3,
@@ -173,6 +196,10 @@ Provide a structured analysis focusing on pricing-relevant insights.
     request: PricingAnalysisRequest
   ): Promise<Omit<PricingRecommendation, 'formattedRecommendation'>> {
     
+    if (!this.multiModelAI) {
+      throw new Error('MultiModelAI not available for comprehensive analysis');
+    }
+
     const pricingPrompt = `
 As a SaaS pricing expert using Kyle Poyar and OpenView methodologies, generate comprehensive pricing recommendations:
 
@@ -223,7 +250,7 @@ Format as structured JSON with specific, actionable recommendations.
 `;
 
     const response = await withRetry(async () => {
-      return await this.multiModelAI.queryMultipleModels({
+      return await this.multiModelAI!.queryMultipleModels({
         prompt: pricingPrompt,
         models: ['gpt-4'],
         temperature: 0.3,
