@@ -65,13 +65,24 @@ export interface OrchestrationResult {
 const WORKFLOW_TEMPLATES: Record<string, Partial<WorkflowDefinition>> = {
   'comprehensive-product-analysis': {
     name: 'Comprehensive Product Analysis',
-    description: 'Full product analysis with market research, competitive analysis, and PRD generation',
+    description: 'Full product analysis with prompt processing, market research, competitive analysis, and PRD generation',
     steps: [
+      {
+        id: 'prompt-processing',
+        name: 'User Prompt Processing & Concept Structuring',
+        agentType: 'PromptProcessorAgent',
+        dependencies: [],
+        timeout: 180000, // 3 minutes
+        retryPolicy: { maxRetries: 2, backoffMs: 3000, exponential: true },
+        required: true,
+        parallelizable: false,
+        inputs: {}
+      },
       {
         id: 'market-research',
         name: 'Market Research Analysis',
         agentType: 'MarketResearchAgent',
-        dependencies: [],
+        dependencies: ['prompt-processing'],
         timeout: 300000, // 5 minutes
         retryPolicy: { maxRetries: 2, backoffMs: 5000, exponential: true },
         required: true,
@@ -82,7 +93,7 @@ const WORKFLOW_TEMPLATES: Record<string, Partial<WorkflowDefinition>> = {
         id: 'competitive-analysis',
         name: 'Competitive Landscape Analysis',
         agentType: 'CompetitiveLandscapeAgent',
-        dependencies: [],
+        dependencies: ['prompt-processing'],
         timeout: 300000,
         retryPolicy: { maxRetries: 2, backoffMs: 5000, exponential: true },
         required: true,
@@ -112,10 +123,21 @@ const WORKFLOW_TEMPLATES: Record<string, Partial<WorkflowDefinition>> = {
         inputs: {}
       },
       {
+        id: 'pricing-analysis',
+        name: 'Pricing Strategy Analysis',
+        agentType: 'PricingAgent',
+        dependencies: ['prd-generation'],
+        timeout: 300000, // 5 minutes
+        retryPolicy: { maxRetries: 2, backoffMs: 5000, exponential: true },
+        required: true,
+        parallelizable: false,
+        inputs: {}
+      },
+      {
         id: 'evaluation',
         name: 'Multi-Model Evaluation',
         agentType: 'OptimizedEvalsAgent',
-        dependencies: ['market-research', 'competitive-analysis', 'prd-generation'],
+        dependencies: ['market-research', 'competitive-analysis', 'prd-generation', 'pricing-analysis'],
         timeout: 300000,
         retryPolicy: { maxRetries: 1, backoffMs: 5000, exponential: false },
         required: false,
@@ -127,13 +149,24 @@ const WORKFLOW_TEMPLATES: Record<string, Partial<WorkflowDefinition>> = {
 
   'rapid-market-validation': {
     name: 'Rapid Market Validation',
-    description: 'Quick market validation with basic competitive analysis',
+    description: 'Quick market validation with prompt processing and basic competitive analysis',
     steps: [
+      {
+        id: 'prompt-processing',
+        name: 'Quick Prompt Processing',
+        agentType: 'PromptProcessorAgent',
+        dependencies: [],
+        timeout: 90000, // 1.5 minutes
+        retryPolicy: { maxRetries: 1, backoffMs: 2000, exponential: false },
+        required: true,
+        parallelizable: false,
+        inputs: {}
+      },
       {
         id: 'quick-market-scan',
         name: 'Quick Market Scan',
         agentType: 'MarketResearchAgent',
-        dependencies: [],
+        dependencies: ['prompt-processing'],
         timeout: 120000, // 2 minutes
         retryPolicy: { maxRetries: 1, backoffMs: 3000, exponential: false },
         required: true,
@@ -144,7 +177,7 @@ const WORKFLOW_TEMPLATES: Record<string, Partial<WorkflowDefinition>> = {
         id: 'competitor-overview',
         name: 'Competitor Overview',
         agentType: 'CompetitiveLandscapeAgent',
-        dependencies: [],
+        dependencies: ['prompt-processing'],
         timeout: 120000,
         retryPolicy: { maxRetries: 1, backoffMs: 3000, exponential: false },
         required: true,
@@ -167,13 +200,24 @@ const WORKFLOW_TEMPLATES: Record<string, Partial<WorkflowDefinition>> = {
 
   'deep-strategic-analysis': {
     name: 'Deep Strategic Analysis',
-    description: 'Comprehensive strategic analysis with multiple validation rounds',
+    description: 'Comprehensive strategic analysis with prompt processing and multiple validation rounds',
     steps: [
+      {
+        id: 'prompt-processing',
+        name: 'Advanced Prompt Processing',
+        agentType: 'PromptProcessorAgent',
+        dependencies: [],
+        timeout: 240000, // 4 minutes
+        retryPolicy: { maxRetries: 2, backoffMs: 5000, exponential: true },
+        required: true,
+        parallelizable: false,
+        inputs: {}
+      },
       {
         id: 'comprehensive-market-research',
         name: 'Comprehensive Market Research',
         agentType: 'MarketResearchAgent',
-        dependencies: [],
+        dependencies: ['prompt-processing'],
         timeout: 600000, // 10 minutes
         retryPolicy: { maxRetries: 3, backoffMs: 10000, exponential: true },
         required: true,
@@ -184,7 +228,7 @@ const WORKFLOW_TEMPLATES: Record<string, Partial<WorkflowDefinition>> = {
         id: 'detailed-competitive-analysis',
         name: 'Detailed Competitive Analysis',
         agentType: 'CompetitiveLandscapeAgent',
-        dependencies: [],
+        dependencies: ['prompt-processing'],
         timeout: 600000,
         retryPolicy: { maxRetries: 3, backoffMs: 10000, exponential: true },
         required: true,
@@ -228,10 +272,21 @@ const WORKFLOW_TEMPLATES: Record<string, Partial<WorkflowDefinition>> = {
         }
       },
       {
+        id: 'advanced-pricing-analysis',
+        name: 'Advanced Pricing Strategy',
+        agentType: 'PricingAgent',
+        dependencies: ['advanced-prd-generation'],
+        timeout: 400000, // 6.7 minutes
+        retryPolicy: { maxRetries: 2, backoffMs: 10000, exponential: true },
+        required: true,
+        parallelizable: false,
+        inputs: {}
+      },
+      {
         id: 'strategic-recommendations',
         name: 'Strategic Recommendations',
         agentType: 'DocumentPackageAgent',
-        dependencies: ['multi-model-evaluation', 'prototype-development'],
+        dependencies: ['multi-model-evaluation', 'prototype-development', 'advanced-pricing-analysis'],
         timeout: 400000,
         retryPolicy: { maxRetries: 1, backoffMs: 10000, exponential: false },
         required: true,
@@ -665,6 +720,24 @@ Respond with just the template key that best matches the requirements.
         avgLatencyMs: 30000,    // Faster due to caching and optimization
         successRate: 0.98,      // Higher success rate
         maxConcurrency: 2,      // Better concurrency support
+        isAvailable: true
+      },
+      {
+        agentType: 'PricingAgent',
+        capabilities: ['pricing-strategy', 'value-metrics', 'tier-analysis', 'competitive-pricing'],
+        costPerOperation: 0.12,
+        avgLatencyMs: 50000, // 50 seconds (complex pricing analysis)
+        successRate: 0.94,
+        maxConcurrency: 1,
+        isAvailable: true
+      },
+      {
+        agentType: 'PromptProcessorAgent',
+        capabilities: ['prompt-analysis', 'concept-extraction', 'clarification-generation'],
+        costPerOperation: 0.05,
+        avgLatencyMs: 25000, // 25 seconds (fast prompt processing)
+        successRate: 0.97,
+        maxConcurrency: 2,
         isAvailable: true
       }
     ];

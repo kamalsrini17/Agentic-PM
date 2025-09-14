@@ -5,6 +5,7 @@
 
 import { EventEmitter } from 'events';
 import { Logger, AgenticError, ErrorCode } from '../utils/errorHandling';
+import { AgentRegistry } from './AgentRegistry';
 
 // ============================================================================
 // WORKFLOW INTERFACES
@@ -82,10 +83,12 @@ export class WorkflowEngine extends EventEmitter {
   private agentRegistry: Map<string, AgentCapability> = new Map();
   private runningExecutions: Set<string> = new Set();
   private logger: Logger;
+  private realAgentRegistry: AgentRegistry;
 
   constructor() {
     super();
     this.logger = Logger.getInstance();
+    this.realAgentRegistry = new AgentRegistry();
     this.setupEventHandlers();
   }
 
@@ -332,7 +335,7 @@ export class WorkflowEngine extends EventEmitter {
       // Prepare step inputs
       const stepInputs = this.prepareStepInputs(step, execution);
 
-      // Execute step with timeout and retries
+      // Execute step with real agent (no more simulation)
       const result = await this.executeStepWithRetries(step, stepInputs, agent);
 
       // Store results
@@ -399,10 +402,20 @@ export class WorkflowEngine extends EventEmitter {
 
     while (attempt <= step.retryPolicy.maxRetries) {
       try {
-        // This is where you'd call the actual agent
-        // For now, we'll simulate the execution
-        const result = await this.simulateAgentExecution(step, inputs, agent);
-        return result;
+        // Execute real agent through AgentRegistry
+        const result = await this.realAgentRegistry.executeAgent(step.agentType, inputs, step.id);
+        return {
+          stepId: step.id,
+          agentType: step.agentType,
+          inputs,
+          outputs: result,
+          metadata: { 
+            latency: agent.avgLatencyMs,
+            cost: agent.costPerOperation,
+            attempt: attempt + 1,
+            realExecution: true
+          }
+        };
 
       } catch (error) {
         lastError = error as Error;
@@ -426,30 +439,7 @@ export class WorkflowEngine extends EventEmitter {
     throw lastError || new Error('Unknown execution error');
   }
 
-  private async simulateAgentExecution(
-    step: WorkflowStep, 
-    inputs: Record<string, any>, 
-    agent: AgentCapability
-  ): Promise<any> {
-    // Simulate processing time based on agent latency
-    await new Promise(resolve => setTimeout(resolve, agent.avgLatencyMs + Math.random() * 100));
-
-    // Simulate occasional failures based on success rate
-    if (Math.random() > agent.successRate) {
-      throw new Error(`Simulated failure for ${step.agentType}`);
-    }
-
-    return {
-      stepId: step.id,
-      agentType: step.agentType,
-      inputs,
-      outputs: { result: `Processed by ${step.agentType}`, timestamp: new Date() },
-      metadata: { 
-        latency: agent.avgLatencyMs,
-        cost: agent.costPerOperation 
-      }
-    };
-  }
+  // Simulation removed - now using real agent execution via AgentRegistry
 
   // ============================================================================
   // UTILITY METHODS
@@ -528,16 +518,34 @@ export class WorkflowEngine extends EventEmitter {
   private prepareStepInputs(step: WorkflowStep, execution: WorkflowExecution): Record<string, any> {
     const inputs = { ...step.inputs };
 
+    // Add execution context and product concept
+    const context = execution.context;
+    inputs.productTitle = context.productConcept?.title || context.title;
+    inputs.productDescription = context.productConcept?.description || context.description;
+    inputs.targetMarket = context.productConcept?.targetMarket;
+    inputs.keyFeatures = context.productConcept?.keyFeatures || [];
+    inputs.goals = context.productConcept?.goals || [];
+    inputs.analysisId = context.analysisId || execution.id;
+
+    // Add raw user prompt for PromptProcessorAgent
+    if (step.agentType === 'PromptProcessorAgent') {
+      inputs.rawPrompt = context.userPrompt || `Analyze product: ${inputs.productTitle}. ${inputs.productDescription}`;
+    }
+
     // Add outputs from completed dependencies
+    const previousResults: Record<string, any> = {};
     for (const depId of step.dependencies) {
       if (execution.stepResults[depId]) {
         inputs[`${depId}_output`] = execution.stepResults[depId];
+        previousResults[depId] = execution.stepResults[depId].outputs || execution.stepResults[depId];
       }
     }
+    inputs.previousResults = previousResults;
 
-    // Add execution context
-    inputs._context = execution.context;
+    // Add execution metadata
+    inputs._context = context;
     inputs._executionId = execution.id;
+    inputs._stepId = step.id;
 
     return inputs;
   }
