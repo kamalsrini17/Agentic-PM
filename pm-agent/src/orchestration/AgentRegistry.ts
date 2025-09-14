@@ -143,7 +143,7 @@ export class AgentRegistry {
             template: inputs.template || 'standard',
             includeFinancials: inputs.includeFinancials || false
           };
-          return await agent.generateDocumentPackage(documentInput);
+          return await agent.createComprehensivePackage(documentInput.productTitle || documentInput.title || 'Product Analysis', documentInput, documentInput.exportOptions || { format: 'pdf', template: 'technical' });
 
         case 'PrototypeGeneratorAgent':
           const prototypeInput = {
