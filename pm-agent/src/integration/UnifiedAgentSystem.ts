@@ -1076,7 +1076,7 @@ export class UnifiedAgentSystem {
         qualityThreshold: 85
       },
       preferences: {
-        prioritizeQuality: true
+        prioritizeQuality: false
       },
       evaluationDimensions: ['content-quality', 'market-research', 'strategic-soundness', 'implementation-readiness']
     });
