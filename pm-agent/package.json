@@ -21,6 +21,7 @@
     "demo": "ts-node src/demo/demo.ts",
     "example": "ts-node src/examples/genericProductExample.ts",
     "test": "ts-node src/integration/SystemTests.ts",
+    "analyze": "ts-node src/analyze-prompt.ts",
     "dev": "ts-node --watch src/index.ts",
     "clean": "rm -rf dist",
     "prepublishOnly": "npm run clean && npm run build"

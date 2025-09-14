@@ -143,7 +143,16 @@ export class AgentRegistry {
             template: inputs.template || 'standard',
             includeFinancials: inputs.includeFinancials || false
           };
-          return await agent.createComprehensivePackage(documentInput.productTitle || documentInput.title || 'Product Analysis', documentInput, documentInput.exportOptions || { format: 'pdf', template: 'technical' });
+          return await agent.createComprehensivePackage(
+            documentInput.productConcept?.title || 'Product Analysis', 
+            {
+              prd: documentInput,
+              marketResearch: documentInput.marketResearch,
+              competitiveLandscape: documentInput.competitiveAnalysis,
+              prototype: documentInput.promptProcessingResult
+            }, 
+            { format: 'pdf', template: 'technical' }
+          );
 
         case 'PrototypeGeneratorAgent':
           const prototypeInput = {
