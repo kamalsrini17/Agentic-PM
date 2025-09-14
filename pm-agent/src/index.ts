@@ -60,12 +60,18 @@ export { SystemTests } from './integration/SystemTests';
 
 // New Components
 export { PromptProcessorAgent } from './agents/PromptProcessorAgent';
+export { PricingAgent } from './agents/PricingAgent';
 export { SessionDocumentStore } from './storage/SessionDocumentStore';
 export { SimpleDocumentParser } from './parsers/SimpleDocumentParser';
 export type {
   UserPromptInput,
   ProcessedProductConcept
 } from './agents/PromptProcessorAgent';
+
+export type {
+  PricingRecommendation,
+  PricingAnalysisRequest
+} from './agents/PricingAgent';
 
 export type {
   UserDocument,

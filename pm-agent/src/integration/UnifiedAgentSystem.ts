@@ -9,6 +9,7 @@ import { OptimizedEvalsAgent, EvaluationRequest, OptimizedEvaluationResult } fro
 import { PromptProcessorAgent, UserPromptInput, ProcessedProductConcept } from '../agents/PromptProcessorAgent';
 import { SessionDocumentStore, DocumentContext } from '../storage/SessionDocumentStore';
 import { SimpleDocumentParser, ParsingOptions } from '../parsers/SimpleDocumentParser';
+import { PricingAgent, PricingRecommendation } from '../agents/PricingAgent';
 import { Logger, AgenticError, ErrorCode } from '../utils/errorHandling';
 
 // ============================================================================
@@ -61,6 +62,9 @@ export interface ComprehensiveAnalysisResult {
   
   // Metrics insights
   metricsInsights?: MetricsInsight[];
+  
+  // Pricing recommendations
+  pricingRecommendation?: PricingRecommendation;
   
   // Unified summary
   summary: {
@@ -211,6 +215,7 @@ export class UnifiedAgentSystem {
   private promptProcessor: PromptProcessorAgent;
   private documentStore: SessionDocumentStore;
   private documentParser: SimpleDocumentParser;
+  private pricingAgent: PricingAgent;
   
   private logger: Logger;
   private config: UnifiedSystemConfig;
@@ -239,6 +244,7 @@ export class UnifiedAgentSystem {
     this.promptProcessor = new PromptProcessorAgent();
     this.documentStore = new SessionDocumentStore();
     this.documentParser = new SimpleDocumentParser();
+    this.pricingAgent = new PricingAgent();
     
     this.initializeComponents();
   }
@@ -382,12 +388,48 @@ export class UnifiedAgentSystem {
         }, 'UnifiedAgentSystem');
       }
 
-      // Phase 4: Unified Analysis and Recommendations
+      // Phase 4: Pricing Analysis (runs after all other analysis is complete)
+      if (result.orchestrationResult?.results || request.productConcept) {
+        try {
+          this.logger.info('Generating pricing recommendations', {
+            analysisId,
+            hasOrchestrationResults: !!result.orchestrationResult
+          }, 'UnifiedAgentSystem');
+
+          const prdDocument = result.orchestrationResult?.results || { 
+            title: request.productConcept?.title,
+            description: request.productConcept?.description,
+            features: request.productConcept?.keyFeatures
+          };
+
+          result.pricingRecommendation = await this.pricingAgent.generatePricingRecommendations({
+            prdDocument,
+            productConcept: request.productConcept,
+            analysisContext: `Analysis ID: ${analysisId}, Analysis Type: ${request.analysisType}`
+          });
+
+          result.metadata.systemsUsed.push('pricing');
+          
+          this.logger.info('Pricing analysis completed', {
+            analysisId,
+            proposedModel: result.pricingRecommendation.valueMetric.proposedModel,
+            recommendedTier: result.pricingRecommendation.packaging.recommendedTier
+          }, 'UnifiedAgentSystem');
+
+        } catch (error) {
+          this.logger.warn('Pricing analysis failed, continuing without it', {
+            error: (error as Error).message
+          }, 'UnifiedAgentSystem');
+          result.metadata.systemsUsed.push('pricing-failed');
+        }
+      }
+
+      // Phase 5: Unified Analysis and Recommendations
       this.synthesizeResults(result);
       this.generateUnifiedRecommendations(result);
       this.calculateSystemPerformance(result);
 
-      // Phase 5: Record comprehensive metrics
+      // Phase 6: Record comprehensive metrics
       this.recordAnalysisMetrics(result, Date.now() - startTime);
 
       // Store analysis
