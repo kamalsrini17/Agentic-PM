@@ -1072,7 +1072,7 @@ export class UnifiedAgentSystem {
       analysisType: 'comprehensive',
       constraints: {
         maxCost: 0.75,
-        maxDuration: 300000, // 5 minutes
+        maxDuration: 1800000, // 30 minutes
         qualityThreshold: 85
       },
       preferences: {
