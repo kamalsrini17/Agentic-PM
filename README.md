@@ -11,11 +11,13 @@ Agentic PM is an innovative AI-powered framework that revolutionizes product man
 ## 🚀 Features
 
 ### Core Capabilities
+- **Natural Language Analysis**: Analyze product concepts directly from natural language prompts
 - **AI-Driven Market Research**: Automated competitive analysis and market insights
 - **Intelligent PRD Generation**: Create comprehensive Product Requirements Documents
 - **Automated PRFAQ Creation**: Generate Amazon-style PR/FAQ documents
 - **Prototype Generation**: Quick MVP and prototype creation
-- **Multi-Model AI Support**: Seamless integration with OpenAI and Claude APIs
+- **Multi-Model AI Support**: Seamless integration with OpenAI and Claude APIs (Claude optional)
+- **Command Line Interface**: Easy-to-use CLI for rapid product analysis
 - **Extensible Agent Architecture**: Easy to add new specialized agents
 
 ### Key Agents
@@ -30,8 +32,8 @@ Agentic PM is an innovative AI-powered framework that revolutionizes product man
 
 - Node.js >= 18.0.0
 - npm or yarn
-- OpenAI API key
-- Anthropic (Claude) API key
+- OpenAI API key (required)
+- Anthropic (Claude) API key (optional, but recommended for better results)
 
 ## 🛠️ Installation
 
@@ -51,13 +53,51 @@ Agentic PM is an innovative AI-powered framework that revolutionizes product man
    
    Create a `.env` file in the `pm-agent` directory:
    ```env
+   # Required - OpenAI API key
    OPENAI_API_KEY=your_openai_api_key_here
+   
+   # Optional - Anthropic API key for Claude models (recommended)
    ANTHROPIC_API_KEY=your_anthropic_api_key_here
    ```
 
 ## 🚀 Quick Start
 
-### Basic Usage
+### 🆕 Natural Language Analysis (Recommended)
+
+Analyze any product concept directly from natural language:
+
+```bash
+cd pm-agent
+
+# Analyze your product concept with natural language
+npm run analyze -- --prompt "I want to build an enterprise messaging platform for AI agents to communicate with humans and each other"
+
+# Quick analysis (faster, lower cost)
+npm run analyze -- --type quick --prompt "Build a CRM for small businesses"
+
+# Read prompt from file
+npm run analyze -- --file my-concept.txt
+
+# Get help
+npm run analyze -- --help
+```
+
+**Example Output:**
+```
+🚀 Agentic PM - Product Concept Analysis
+📊 ANALYSIS SUMMARY:
+   Overall Score: 85/100
+   Confidence: 92%
+   Duration: 45.2s
+   Cost: $0.0234
+   
+💡 TOP STRATEGIC RECOMMENDATIONS:
+   1. [HIGH] Focus on agent-to-agent communication protocols
+   2. [HIGH] Implement enterprise security and compliance features
+   3. [MEDIUM] Develop integration ecosystem for popular AI platforms
+```
+
+### Basic Usage (Programmatic)
 
 ```typescript
 import { AgenticPMClient } from './src/agenticClient';
@@ -86,12 +126,41 @@ cd pm-agent
 npm run demo
 ```
 
-Or try other available commands:
+### Available Commands
+
 ```bash
+# Natural language analysis (recommended)
+npm run analyze -- --prompt "Your product concept"
+npm run analyze -- --file concept.txt
+npm run analyze -- --type quick --prompt "Your concept"
+
+# Traditional demos and examples
+npm run demo           # Full system demo
 npm run example        # Generic product example
 npm test              # Run system tests
 ```
 
+### Analysis Types
+
+- **`quick`**: Fast analysis (15-30s, ~$0.10) - Good for initial validation
+- **`standard`**: Balanced analysis (1-2min, ~$0.25) - Comprehensive insights
+- **`comprehensive`**: Deep analysis (2-5min, ~$0.50) - Full strategic recommendations
+
+## 🆕 Recent Updates
+
+### v1.1.0 - Natural Language Analysis & Fixes
+- ✅ **New CLI Tool**: `npm run analyze` command for natural language product analysis
+- ✅ **Fixed Agent Issues**: Resolved DocumentPackageAgent method compatibility
+- ✅ **Claude Optional**: Anthropic API key is now optional (OpenAI sufficient)
+- ✅ **Improved Error Handling**: Better error messages and graceful degradation
+- ✅ **Comprehensive Documentation**: Updated examples and usage patterns
+- ✅ **Enhanced Output**: Rich, formatted analysis results with actionable insights
+
+### Key Improvements
+- **Natural Language Processing**: Analyze any product idea described in plain English
+- **Flexible Input Options**: Support for prompts, files, and different analysis depths
+- **Cost Optimization**: Choose analysis type based on budget and time constraints
+- **Better Reliability**: Fixed agent orchestration and evaluation issues
 
 ## 📁 Project Structure
 
@@ -107,7 +176,9 @@ Agentic-PM/
 │   │   ├── metrics/           # Performance monitoring
 │   │   ├── evaluation/        # AI model evaluation
 │   │   ├── integration/       # System integration
-│   │   └── demo/              # Demo applications
+│   │   ├── demo/              # Demo applications
+│   │   ├── examples/          # Usage examples
+│   │   └── analyze-prompt.ts  # 🆕 CLI analysis tool
 │   ├── package.json
 │   └── tsconfig.json
 ├── LICENSE                     # MIT License
