@@ -117,9 +117,9 @@ export class OptimizedEvalsAgent {
   private cacheHitRate: number = 0;
   
   // Optimization strategies
-  private readonly FAST_EVALUATION_MODELS = ['gpt-3.5-turbo', 'claude-3-haiku-20240307'];
+  private readonly FAST_EVALUATION_MODELS = ['gpt-4', 'claude-3-haiku-20240307'];
   private readonly ACCURATE_EVALUATION_MODELS = ['gpt-4-turbo-preview', 'claude-3-opus-20240229'];
-  private readonly COST_EFFECTIVE_MODELS = ['gpt-3.5-turbo', 'claude-3-haiku-20240307'];
+  private readonly COST_EFFECTIVE_MODELS = ['gpt-4', 'claude-3-haiku-20240307'];
 
   constructor() {
     this.multiModelAI = new MultiModelAI();
@@ -375,7 +375,7 @@ export class OptimizedEvalsAgent {
       selectedModels.push(sortedModels[i].modelName);
     }
 
-    return selectedModels.length > 0 ? selectedModels : ['gpt-3.5-turbo']; // Fallback
+    return selectedModels.length > 0 ? selectedModels : ['gpt-4']; // Fallback
   }
 
   private selectBestModelForDimension(dimension: string, strategy: 'balanced'): string {
@@ -383,11 +383,11 @@ export class OptimizedEvalsAgent {
       'content-quality': ['gpt-4-turbo-preview', 'claude-3-opus-20240229'],
       'market-research': ['gpt-4-turbo-preview', 'claude-3-sonnet-20240229'],
       'strategic-soundness': ['claude-3-opus-20240229', 'gpt-4-turbo-preview'],
-      'implementation-readiness': ['gpt-3.5-turbo', 'claude-3-haiku-20240307'],
+      'implementation-readiness': ['gpt-4', 'claude-3-haiku-20240307'],
       'technical-feasibility': ['gpt-4-turbo-preview', 'claude-3-sonnet-20240229']
     };
 
-    const preferredModels = dimensionModelMap[dimension] || ['gpt-3.5-turbo'];
+    const preferredModels = dimensionModelMap[dimension] || ['gpt-4'];
     
     // Return the first available model from preferred list
     for (const model of preferredModels) {
@@ -396,7 +396,7 @@ export class OptimizedEvalsAgent {
       }
     }
 
-    return 'gpt-3.5-turbo'; // Ultimate fallback
+    return 'gpt-4'; // Ultimate fallback
   }
 
   private estimateTotalCost(models: string[], dimensions: string[]): number {
@@ -704,7 +704,7 @@ export class OptimizedEvalsAgent {
   private initializeModelProfiles(): void {
     const defaultProfiles: ModelPerformanceProfile[] = [
       {
-        modelName: 'gpt-3.5-turbo',
+        modelName: 'gpt-4',
         avgCostPerRequest: 0.002,
         avgLatencyMs: 1500,
         accuracyScore: 75,
