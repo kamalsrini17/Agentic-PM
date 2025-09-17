@@ -154,6 +154,7 @@ export interface EnhancedAnalysisRequest {
     prioritizeSpeed?: boolean;
     prioritizeCost?: boolean;
     prioritizeQuality?: boolean;
+    forceComprehensive?: boolean;
   };
   
   // Document processing options
@@ -351,7 +352,21 @@ export class UnifiedAgentSystem {
       };
 
       // Phase 1: Orchestration (if enabled and needed)
-      if (this.config.orchestration?.enabled && this.shouldUseOrchestration(request)) {
+      const shouldOrchestrate = this.shouldUseOrchestration(request);
+      const orchestrationEnabled = this.config.orchestration?.enabled;
+      
+      if (process.env.VERBOSE_ANALYSIS === 'true') {
+        console.log(`🔍 ORCHESTRATION CHECK:`);
+        console.log(`   Orchestration Enabled: ${orchestrationEnabled}`);
+        console.log(`   Should Use Orchestration: ${shouldOrchestrate}`);
+        console.log(`   Analysis Type: ${request.analysisType}`);
+        console.log(`   Will Run Orchestration: ${orchestrationEnabled && shouldOrchestrate}`);
+      }
+      
+      if (orchestrationEnabled && shouldOrchestrate) {
+        if (process.env.VERBOSE_ANALYSIS === 'true') {
+          console.log(`🚀 STARTING ORCHESTRATION...`);
+        }
         result.orchestrationResult = await this.runOrchestration(request, analysisId);
         result.metadata.systemsUsed.push('orchestration');
         
@@ -1255,7 +1270,8 @@ export class UnifiedAgentSystem {
       documentFiles,
       analysisPreferences: {
         detailLevel: 'comprehensive',
-        prioritizeQuality: true
+        prioritizeQuality: true,
+        forceComprehensive: true  // Force comprehensive analysis
       },
       documentOptions: {
         useContextForPersonalization: true,
@@ -1456,7 +1472,7 @@ export class UnifiedAgentSystem {
         goals: concept.goals,
         constraints: concept.constraints
       },
-      analysisType: request.analysisPreferences?.detailLevel === 'comprehensive' ? 'comprehensive' : concept.suggestedAnalysisType,
+      analysisType: (request.analysisPreferences?.detailLevel === 'comprehensive' || request.analysisPreferences?.forceComprehensive) ? 'comprehensive' : concept.suggestedAnalysisType,
       constraints: {
         maxCost: request.analysisPreferences?.prioritizeCost ? 0.30 : undefined,
         maxDuration: request.analysisPreferences?.prioritizeSpeed ? 60000 : undefined,
