@@ -1456,7 +1456,7 @@ export class UnifiedAgentSystem {
         goals: concept.goals,
         constraints: concept.constraints
       },
-      analysisType: concept.suggestedAnalysisType,
+      analysisType: request.analysisPreferences?.detailLevel === 'comprehensive' ? 'comprehensive' : concept.suggestedAnalysisType,
       constraints: {
         maxCost: request.analysisPreferences?.prioritizeCost ? 0.30 : undefined,
         maxDuration: request.analysisPreferences?.prioritizeSpeed ? 60000 : undefined,
