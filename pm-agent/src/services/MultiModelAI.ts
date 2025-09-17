@@ -113,57 +113,14 @@ export class MultiModelAI {
     }
   }
 
+  // REMOVED: queryMultipleModels function - replaced with direct OpenAI calls
+  // This method was causing hanging issues and has been deprecated
   async queryMultipleModels(request: MultiModelRequest): Promise<MultiModelResponse> {
-    this.logger.info('Starting multi-model query', {
-      models: request.models,
-      promptLength: request.prompt.length
-    }, 'MultiModelAI');
-
-    const startTime = Date.now();
-    const responses: Record<string, AIResponse> = {};
-    const errors: Record<string, Error> = {};
-
-    // Execute all model queries in parallel
-    const promises = request.models.map(async (modelName) => {
-      try {
-        const response = await this.querySingleModel(modelName, request);
-        responses[modelName] = response;
-        return { modelName, success: true, response };
-      } catch (error) {
-        this.logger.error(`Model ${modelName} failed`, error as Error, {
-          modelName,
-          promptLength: request.prompt.length
-        }, 'MultiModelAI');
-        errors[modelName] = error as Error;
-        return { modelName, success: false, error: error as Error };
-      }
-    });
-
-    await Promise.allSettled(promises);
-
-    const totalLatency = Date.now() - startTime;
-
-    // Determine fastest and most comprehensive response
-    const fastest = this.findFastestResponse(responses);
-    const mostTokens = this.findMostComprehensiveResponse(responses);
-
-    const result: MultiModelResponse = {
-      responses,
-      fastest,
-      mostTokens,
-      errors,
-      totalLatency
-    };
-
-    this.logger.info('Multi-model query completed', {
-      successfulModels: Object.keys(responses).length,
-      failedModels: Object.keys(errors).length,
-      totalLatency,
-      fastest,
-      mostTokens
-    }, 'MultiModelAI');
-
-    return result;
+    throw new AgenticError(
+      ErrorCode.PROCESSING_ERROR,
+      'queryMultipleModels has been deprecated',
+      'This method has been replaced with direct OpenAI API calls for better performance.'
+    );
   }
 
   private async querySingleModel(
