@@ -90,6 +90,14 @@ export class AgentRegistry {
       inputKeys: Object.keys(inputs)
     }, 'AgentRegistry');
 
+    // Verbose output for debugging
+    const verbose = process.env.VERBOSE_ANALYSIS === 'true';
+    if (verbose) {
+      console.log(`\n🤖 EXECUTING AGENT: ${agentType}`);
+      console.log(`📋 Step ID: ${stepId}`);
+      console.log(`📥 Input Keys: ${Object.keys(inputs).join(', ')}`);
+    }
+
     try {
       switch (agentType) {
         case 'PromptProcessorAgent':
@@ -102,7 +110,15 @@ export class AgentRegistry {
               constraints: inputs.constraints || []
             }
           };
-          return await agent.processPrompt(promptInput);
+          const promptResult = await agent.processPrompt(promptInput);
+          if (verbose) {
+            console.log(`📤 PromptProcessorAgent Output:`);
+            console.log(`   Title: ${promptResult.title}`);
+            console.log(`   Description: ${promptResult.description?.substring(0, 100)}...`);
+            console.log(`   Target Market: ${promptResult.targetMarket}`);
+            console.log(`   Key Features: ${promptResult.keyFeatures?.slice(0, 3).join(', ')}`);
+          }
+          return promptResult;
 
         case 'MarketResearchAgent':
           const marketInput = {
@@ -115,7 +131,14 @@ export class AgentRegistry {
             // Include structured concept from PromptProcessorAgent if available
             ...(inputs.previousResults?.['prompt-processing'] || {})
           };
-          return await agent.conductMarketResearch(marketInput);
+          const marketResult = await agent.conductMarketResearch(marketInput);
+          if (verbose) {
+            console.log(`📤 MarketResearchAgent Output:`);
+            console.log(`   Executive Summary: ${marketResult.ExecutiveSummary?.substring(0, 150)}...`);
+            console.log(`   Market Opportunity: ${marketResult.MarketOpportunityAssessment?.substring(0, 100)}...`);
+            console.log(`   Key Success Metrics: ${Object.keys(marketResult.KeySuccessMetrics || {}).join(', ')}`);
+          }
+          return marketResult;
 
         case 'CompetitiveLandscapeAgent':
           const competitiveInput = {
@@ -143,7 +166,16 @@ export class AgentRegistry {
             template: inputs.template || 'standard',
             includeFinancials: inputs.includeFinancials || false
           };
-          return await agent.createComprehensivePackage(
+          if (verbose) {
+            console.log(`📤 DocumentPackageAgent Input:`);
+            console.log(`   Product Title: ${documentInput.productConcept?.title}`);
+            console.log(`   Has Market Research: ${!!documentInput.marketResearch}`);
+            console.log(`   Has Competitive Analysis: ${!!documentInput.competitiveAnalysis}`);
+            console.log(`   Has Prompt Processing: ${!!documentInput.promptProcessingResult}`);
+            console.log(`   🔄 Calling DocumentPackageAgent.createComprehensivePackage...`);
+          }
+          
+          const docResult = await agent.createComprehensivePackage(
             documentInput.productConcept?.title || 'Product Analysis', 
             {
               prd: documentInput,
@@ -153,6 +185,15 @@ export class AgentRegistry {
             }, 
             { format: 'pdf', template: 'technical' }
           );
+          
+          if (verbose) {
+            console.log(`📤 DocumentPackageAgent Output:`);
+            console.log(`   Executive Summary Length: ${docResult.executiveSummary?.length || 0}`);
+            console.log(`   Business Case Length: ${docResult.businessCase?.length || 0}`);
+            console.log(`   Implementation Roadmap Length: ${docResult.implementationRoadmap?.length || 0}`);
+          }
+          
+          return docResult;
 
         case 'PrototypeGeneratorAgent':
           const prototypeInput = {

@@ -15,6 +15,7 @@ interface CliArgs {
   prompt?: string;
   file?: string;
   type?: 'quick' | 'standard' | 'comprehensive';
+  verbose?: boolean;
   help?: boolean;
 }
 
@@ -37,6 +38,10 @@ function parseArgs(): CliArgs {
       case '--type':
       case '-t':
         args.type = argv[++i] as 'quick' | 'standard' | 'comprehensive';
+        break;
+      case '--verbose':
+      case '-v':
+        args.verbose = true;
         break;
       case '--help':
       case '-h':
@@ -67,6 +72,7 @@ Options:
   --prompt, -p    Product concept prompt (required if no file)
   --file, -f      Read prompt from file
   --type, -t      Analysis type: quick|standard|comprehensive (default: comprehensive)
+  --verbose, -v   Show detailed output from each agent
   --help, -h      Show this help
 
 Examples:
@@ -98,7 +104,7 @@ async function readPromptFromFile(filePath: string): Promise<string> {
 // ANALYSIS EXECUTION
 // ============================================================================
 
-async function runAnalysis(prompt: string, analysisType: 'quick' | 'standard' | 'comprehensive' = 'comprehensive') {
+async function runAnalysis(prompt: string, analysisType: 'quick' | 'standard' | 'comprehensive' = 'comprehensive', verbose: boolean = false) {
   const logger = Logger.getInstance();
   
   console.log('🚀 Agentic PM - Product Concept Analysis');
@@ -114,6 +120,12 @@ async function runAnalysis(prompt: string, analysisType: 'quick' | 'standard' | 
     costBudget: analysisType === 'quick' ? 0.20 : analysisType === 'standard' ? 0.50 : 1.00,
     latencyTarget: analysisType === 'quick' ? 30000 : analysisType === 'standard' ? 60000 : 120000
   });
+
+  // Enable verbose output if requested
+  if (verbose) {
+    console.log('🔍 VERBOSE MODE: Detailed agent output enabled\n');
+    process.env.VERBOSE_ANALYSIS = 'true';
+  }
 
   try {
     const startTime = Date.now();
@@ -308,7 +320,7 @@ async function main() {
   }
   
   // Run the analysis
-  await runAnalysis(prompt.trim(), analysisType);
+  await runAnalysis(prompt.trim(), analysisType, args.verbose || false);
 }
 
 // Execute if run directly
