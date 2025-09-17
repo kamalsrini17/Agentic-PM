@@ -90,22 +90,23 @@ const WORKFLOW_TEMPLATES: Record<string, Partial<WorkflowDefinition>> = {
         parallelizable: true,
         inputs: {}
       },
-      {
-        id: 'competitive-analysis',
-        name: 'Competitive Landscape Analysis',
-        agentType: 'CompetitiveLandscapeAgent',
-        dependencies: ['prompt-processing'],
-        timeout: 300000,
-        retryPolicy: { maxRetries: 2, backoffMs: 5000, exponential: true },
-        required: true,
-        parallelizable: true,
-        inputs: {}
-      },
+      // TEMPORARILY COMMENTED OUT - CompetitiveLandscapeAgent hanging issue
+      // {
+      //   id: 'competitive-analysis',
+      //   name: 'Competitive Landscape Analysis',
+      //   agentType: 'CompetitiveLandscapeAgent',
+      //   dependencies: ['prompt-processing'],
+      //   timeout: 300000,
+      //   retryPolicy: { maxRetries: 2, backoffMs: 5000, exponential: true },
+      //   required: true,
+      //   parallelizable: true,
+      //   inputs: {}
+      // },
       {
         id: 'prd-generation',
         name: 'Product Requirements Document Generation',
         agentType: 'DocumentPackageAgent',
-        dependencies: ['market-research', 'competitive-analysis'],
+        dependencies: ['market-research'],  // Removed competitive-analysis dependency
         timeout: 400000,
         retryPolicy: { maxRetries: 2, backoffMs: 5000, exponential: true },
         required: true,
@@ -138,7 +139,7 @@ const WORKFLOW_TEMPLATES: Record<string, Partial<WorkflowDefinition>> = {
         id: 'evaluation',
         name: 'Multi-Model Evaluation',
         agentType: 'OptimizedEvalsAgent',
-        dependencies: ['market-research', 'competitive-analysis', 'prd-generation', 'pricing-analysis'],
+        dependencies: ['market-research', 'prd-generation', 'pricing-analysis'],  // Removed competitive-analysis
         timeout: 300000,
         retryPolicy: { maxRetries: 1, backoffMs: 5000, exponential: false },
         required: false,

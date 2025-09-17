@@ -145,11 +145,30 @@ export class AgentRegistry {
             productTitle: inputs.productTitle || inputs.title,
             productDescription: inputs.productDescription || inputs.description,
             targetMarket: inputs.targetMarket,
+            geography: inputs.geography || 'Global',  // Fix: Add missing geography field
             keyFeatures: inputs.keyFeatures || [],
             // Include structured concept from PromptProcessorAgent if available
             ...(inputs.previousResults?.['prompt-processing'] || {})
           };
-          return await agent.analyzeCompetitiveLandscape(competitiveInput);
+          
+          if (verbose) {
+            console.log(`📤 CompetitiveLandscapeAgent Input:`);
+            console.log(`   Product Title: ${competitiveInput.productTitle}`);
+            console.log(`   Target Market: ${competitiveInput.targetMarket}`);
+            console.log(`   Geography: ${competitiveInput.geography}`);
+            console.log(`   🔄 Calling CompetitiveLandscapeAgent.analyzeCompetitiveLandscape...`);
+          }
+          
+          const competitiveResult = await agent.analyzeCompetitiveLandscape(competitiveInput);
+          
+          if (verbose) {
+            console.log(`📤 CompetitiveLandscapeAgent Output:`);
+            console.log(`   Market Overview: ${competitiveResult.marketOverview?.substring(0, 100)}...`);
+            console.log(`   Direct Competitors: ${competitiveResult.directCompetitors?.length || 0} found`);
+            console.log(`   Market Gaps: ${competitiveResult.marketGaps?.length || 0} identified`);
+          }
+          
+          return competitiveResult;
 
         case 'DocumentPackageAgent':
           const documentInput = {

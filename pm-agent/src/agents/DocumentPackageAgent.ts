@@ -117,9 +117,9 @@ export class DocumentPackageAgent {
 As a senior executive consultant, create a compelling executive summary for:
 
 Product: ${productTitle}
-PRD: ${JSON.stringify(analysisData.prd).substring(0, 1000)}
-Market Research: ${JSON.stringify(analysisData.marketResearch).substring(0, 1000)}
-Competitive Analysis: ${JSON.stringify(analysisData.competitiveLandscape).substring(0, 1000)}
+PRD: ${JSON.stringify(analysisData.prd || {}).substring(0, 1000)}
+Market Research: ${JSON.stringify(analysisData.marketResearch || {}).substring(0, 1000)}
+Competitive Analysis: ${JSON.stringify(analysisData.competitiveLandscape || {}).substring(0, 1000)}
 
 Create a 2-page executive summary that includes:
 
@@ -177,8 +177,8 @@ Format as polished executive summary text.
 As a business strategy consultant, create a comprehensive business case for:
 
 Product: ${productTitle}
-Market Data: ${JSON.stringify(analysisData.marketResearch).substring(0, 800)}
-Competitive Data: ${JSON.stringify(analysisData.competitiveLandscape).substring(0, 800)}
+Market Data: ${JSON.stringify(analysisData.marketResearch || {}).substring(0, 800)}
+Competitive Data: ${JSON.stringify(analysisData.competitiveLandscape || {}).substring(0, 800)}
 
 Generate a detailed business case including:
 
@@ -236,8 +236,8 @@ Format as comprehensive JSON business case structure.
 As a program manager, create a detailed implementation roadmap for:
 
 Product: ${productTitle}
-PRD Requirements: ${JSON.stringify(analysisData.prd).substring(0, 1000)}
-Prototype Specs: ${JSON.stringify(analysisData.prototype).substring(0, 500)}
+PRD Requirements: ${JSON.stringify(analysisData.prd || {}).substring(0, 1000)}
+Prototype Specs: ${JSON.stringify(analysisData.prototype || {}).substring(0, 500)}
 
 Create a comprehensive 12-month roadmap including:
 
@@ -292,8 +292,8 @@ Format as detailed JSON roadmap with timeline, milestones, and dependencies.
 As a risk management consultant, create a comprehensive risk assessment for:
 
 Product: ${productTitle}
-Market Analysis: ${JSON.stringify(analysisData.marketResearch).substring(0, 800)}
-Competitive Analysis: ${JSON.stringify(analysisData.competitiveLandscape).substring(0, 800)}
+Market Analysis: ${JSON.stringify(analysisData.marketResearch || {}).substring(0, 800)}
+Competitive Analysis: ${JSON.stringify(analysisData.competitiveLandscape || {}).substring(0, 800)}
 
 Analyze risks across all dimensions:
 
@@ -356,7 +356,7 @@ Format as comprehensive JSON risk register.
 As a metrics and analytics expert, define comprehensive success metrics for:
 
 Product: ${productTitle}
-Business Context: ${JSON.stringify(analysisData.prd).substring(0, 1000)}
+Business Context: ${JSON.stringify(analysisData.prd || {}).substring(0, 1000)}
 
 Create a metrics framework including:
 
