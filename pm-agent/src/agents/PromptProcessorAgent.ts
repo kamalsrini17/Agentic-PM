@@ -4,6 +4,7 @@
  */
 
 import { MultiModelAI } from '../services/MultiModelAI';
+import { OpenAI } from 'openai';
 import { Logger, AgenticError, ErrorCode } from '../utils/errorHandling';
 
 // ============================================================================
@@ -292,14 +293,14 @@ Focus on:
 - Important keywords and domain terms
 `;
 
-    const response = await this.multiModelAI.queryMultipleModels({
-      prompt: analysisPrompt,
-      models: ['gpt-4'],
-      temperature: 0.3,
-      maxTokens: 1000
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4',
+      messages: [{ role: 'user', content: analysisPrompt }],
+      temperature: 0.3
     });
 
-    const content = response.responses['gpt-4']?.content;
+    const content = response.choices[0].message.content;
     if (!content) {
       throw new Error('Failed to get initial analysis from AI model');
     }
@@ -407,14 +408,14 @@ Generate a structured concept in JSON format:
 Make it specific to the ${domain} domain and ensure the target market is well-defined.
 `;
 
-    const response = await this.multiModelAI.queryMultipleModels({
-      prompt: structurePrompt,
-      models: ['gpt-4'],
-      temperature: 0.3,
-      maxTokens: 800
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4',
+      messages: [{ role: 'user', content: structurePrompt }],
+      temperature: 0.3
     });
 
-    const content = response.responses['gpt-4']?.content;
+    const content = response.choices[0].message.content;
     if (!content) {
       throw new Error('Failed to generate structured concept');
     }

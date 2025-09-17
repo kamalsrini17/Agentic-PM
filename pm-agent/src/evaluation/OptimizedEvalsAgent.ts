@@ -5,6 +5,7 @@
 
 import { Logger, AgenticError, ErrorCode } from '../utils/errorHandling';
 import { MultiModelAI } from '../services/MultiModelAI';
+import { OpenAI } from 'openai';
 import { MetricsCollector, BUSINESS_METRICS } from '../metrics/MetricsCollector';
 import { createHash } from 'crypto';
 
@@ -570,22 +571,24 @@ export class OptimizedEvalsAgent {
     const startTime = Date.now();
 
     try {
-      const response = await this.multiModelAI.queryMultipleModels({
-        prompt,
-        models: [modelName],
-        systemPrompt: this.getDimensionSystemPrompt(dimension),
-        temperature: 0.3,
-        maxTokens: 1000 // Optimized for cost
+      const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+      const response = await openai.chat.completions.create({
+        model: modelName.startsWith('gpt') ? modelName : 'gpt-4',
+        messages: [
+          { role: 'system', content: this.getDimensionSystemPrompt(dimension) },
+          { role: 'user', content: prompt }
+        ],
+        temperature: 0.3
       });
 
-      const modelResponse = response.responses[modelName];
-      if (!modelResponse) {
+      const modelResponse = response.choices[0].message;
+      if (!modelResponse?.content) {
         throw new Error(`No response from model ${modelName}`);
       }
 
       const parsed = this.parseDimensionResponse(modelResponse.content);
       const latency = Date.now() - startTime;
-      const cost = modelResponse.cost || this.estimateModelCost(modelName, prompt.length);
+      const cost = this.estimateModelCost(modelName, prompt.length);
 
       // Update model performance
       this.updateModelPerformance(modelName, cost, latency, parsed.score > 70);

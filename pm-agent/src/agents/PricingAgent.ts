@@ -5,6 +5,7 @@
 
 import { Logger, AgenticError, ErrorCode, withRetry } from '../utils/errorHandling';
 import { MultiModelAI } from '../services/MultiModelAI';
+import { OpenAI } from 'openai';
 import { ProductConcept } from '../validation/schemas';
 
 // ============================================================================
@@ -167,15 +168,15 @@ Provide a structured analysis focusing on pricing-relevant insights.
 `;
 
     const response = await withRetry(async () => {
-      return await this.multiModelAI!.queryMultipleModels({
-        prompt: analysisPrompt,
-        models: ['gpt-4'],
-        temperature: 0.3,
-        maxTokens: 2000
+      const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+      return await openai.chat.completions.create({
+        model: 'gpt-4',
+        messages: [{ role: 'user', content: analysisPrompt }],
+        temperature: 0.3
       });
     });
 
-    const analysis = response.responses['gpt-4']?.content;
+    const analysis = response.choices[0].message.content;
     if (!analysis) {
       throw new Error('Failed to analyze PRD for pricing context');
     }
@@ -250,15 +251,15 @@ Format as structured JSON with specific, actionable recommendations.
 `;
 
     const response = await withRetry(async () => {
-      return await this.multiModelAI!.queryMultipleModels({
-        prompt: pricingPrompt,
-        models: ['gpt-4'],
-        temperature: 0.3,
-        maxTokens: 3000
+      const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+      return await openai.chat.completions.create({
+        model: 'gpt-4',
+        messages: [{ role: 'user', content: pricingPrompt }],
+        temperature: 0.3
       });
     });
 
-    const content = response.responses['gpt-4']?.content;
+    const content = response.choices[0].message.content;
     if (!content) {
       throw new Error('Failed to generate pricing recommendations');
     }

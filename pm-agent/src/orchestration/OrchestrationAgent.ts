@@ -6,6 +6,7 @@
 import { WorkflowEngine, WorkflowDefinition, WorkflowStep, AgentCapability } from './WorkflowEngine';
 import { Logger, AgenticError, ErrorCode } from '../utils/errorHandling';
 import { MultiModelAI } from '../services/MultiModelAI';
+import { OpenAI } from 'openai';
 
 // ============================================================================
 // ORCHESTRATION INTERFACES
@@ -460,14 +461,14 @@ Respond with just the template key that best matches the requirements.
 `;
 
     try {
-      const response = await this.multiModelAI.queryMultipleModels({
-        prompt: analysisPrompt,
-        models: ['gpt-4-turbo-preview'],
-        temperature: 0.3,
-        maxTokens: 100
+      const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+      const response = await openai.chat.completions.create({
+        model: 'gpt-4',
+        messages: [{ role: 'user', content: analysisPrompt }],
+        temperature: 0.3
       });
 
-      const recommendedTemplate = response.responses['gpt-4-turbo-preview']?.content.trim();
+      const recommendedTemplate = response.choices[0].message.content?.trim();
       
       if (recommendedTemplate && WORKFLOW_TEMPLATES[recommendedTemplate]) {
         this.logger.info(`Selected workflow template: ${recommendedTemplate}`, {
