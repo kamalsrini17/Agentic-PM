@@ -17,8 +17,8 @@ export interface ModelConfig {
 export const AVAILABLE_MODELS: Record<string, ModelConfig> = {
   'gpt-4': {
     provider: 'openai',
-    model: 'gpt-4-turbo-preview',
-    maxTokens: 4000,
+    model: 'gpt-4o',
+    maxTokens: 16000,
     temperature: 0.3,
     timeout: 60000
   },
@@ -310,11 +310,12 @@ export class MultiModelAI {
     // Approximate costs per 1K tokens (as of 2024)
     const costs: Record<string, { input: number; output: number }> = {
       'gpt-4-turbo-preview': { input: 0.01, output: 0.03 },
+      'gpt-4o': { input: 0.005, output: 0.015 },
       'gpt-5': { input: 0.015, output: 0.045 }, // Estimated
       'gpt-4': { input: 0.03, output: 0.06 }
     };
 
-    const cost = costs[model] || costs['gpt-4'];
+    const cost = costs[model] || costs['gpt-4o'];
     return (totalTokens / 1000) * ((cost.input + cost.output) / 2);
   }
 

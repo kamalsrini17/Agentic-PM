@@ -136,7 +136,7 @@ Format as JSON array of user flow objects.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.4,
       max_tokens: 3000
@@ -177,7 +177,7 @@ Format as JSON array of component specifications.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.3,
       max_tokens: 3500
@@ -226,7 +226,7 @@ Format as comprehensive JSON design system object.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.3,
       max_tokens: 2500
@@ -318,7 +318,7 @@ Return only the complete TypeScript React component code.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.3,
       max_tokens: 3000
@@ -354,7 +354,7 @@ Return only the complete TypeScript React component code.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.3,
       max_tokens: 3500
@@ -386,7 +386,7 @@ Return only the complete TypeScript React component code.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.4,
       max_tokens: 2500
@@ -423,7 +423,7 @@ Format as JSON array of testing scenario objects.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.3,
       max_tokens: 2000

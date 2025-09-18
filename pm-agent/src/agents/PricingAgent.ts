@@ -170,7 +170,7 @@ Provide a structured analysis focusing on pricing-relevant insights.
     const response = await withRetry(async () => {
       const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
       return await openai.chat.completions.create({
-        model: 'gpt-4',
+        model: 'gpt-4o',
         messages: [{ role: 'user', content: analysisPrompt }],
         temperature: 0.3
       });
@@ -253,7 +253,7 @@ Format as structured JSON with specific, actionable recommendations.
     const response = await withRetry(async () => {
       const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
       return await openai.chat.completions.create({
-        model: 'gpt-4',
+        model: 'gpt-4o',
         messages: [{ role: 'user', content: pricingPrompt }],
         temperature: 0.3
       });

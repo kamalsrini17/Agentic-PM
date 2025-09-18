@@ -134,7 +134,7 @@ export class PromptProcessorAgent {
         metadata: {
           processedAt: new Date(),
           processingTime: 0,
-          modelUsed: 'gpt-4',
+          modelUsed: 'gpt-4o',
           promptLength: input.rawPrompt.length
         }
       };
@@ -166,7 +166,7 @@ export class PromptProcessorAgent {
         metadata: {
           processedAt: new Date(),
           processingTime,
-          modelUsed: 'gpt-4',
+          modelUsed: 'gpt-4o',
           promptLength: input.rawPrompt.length
         }
       };
@@ -295,7 +295,7 @@ Focus on:
 
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
     const response = await openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: analysisPrompt }],
       temperature: 0.3
     });
@@ -410,7 +410,7 @@ Make it specific to the ${domain} domain and ensure the target market is well-de
 
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
     const response = await openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: structurePrompt }],
       temperature: 0.3
     });
