@@ -160,7 +160,7 @@ Format as polished executive summary text.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.3,
       max_tokens: 2000
@@ -219,7 +219,7 @@ Format as comprehensive JSON business case structure.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.3,
       max_tokens: 3000
@@ -275,7 +275,7 @@ Format as detailed JSON roadmap with timeline, milestones, and dependencies.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.3,
       max_tokens: 2500
@@ -339,7 +339,7 @@ Format as comprehensive JSON risk register.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.3,
       max_tokens: 2500
@@ -400,7 +400,7 @@ Format as comprehensive JSON metrics framework.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.3,
       max_tokens: 2000

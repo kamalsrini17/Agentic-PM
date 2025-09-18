@@ -214,7 +214,7 @@ Format as JSON with quantitative metrics where possible.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.3
     });
@@ -249,7 +249,7 @@ Format as JSON array of detailed competitor profiles.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.4,
       max_tokens: 3500
@@ -288,7 +288,7 @@ Format as JSON array of competitor profiles.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.4,
       max_tokens: 2500
@@ -328,7 +328,7 @@ Format as JSON array focusing on future competitive threats.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.5,
       max_tokens: 2000
@@ -370,7 +370,7 @@ Format as JSON array of market gap opportunities.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.4,
       max_tokens: 2000
@@ -407,7 +407,7 @@ Format as JSON positioning strategy.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.4,
       max_tokens: 1500
@@ -445,7 +445,7 @@ Format as comprehensive JSON matching CompetitiveLandscapeReport interface.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.3,
       max_tokens: 4000
@@ -497,7 +497,7 @@ Format as detailed JSON benchmark report.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.3
     });
@@ -529,7 +529,7 @@ Format as competitive war game simulation results in JSON.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.5
     });

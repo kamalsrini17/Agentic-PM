@@ -464,7 +464,7 @@ Respond with just the template key that best matches the requirements.
     try {
       const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
       const response = await openai.chat.completions.create({
-        model: 'gpt-4',
+        model: 'gpt-4o',
         messages: [{ role: 'user', content: analysisPrompt }],
         temperature: 0.3
       });

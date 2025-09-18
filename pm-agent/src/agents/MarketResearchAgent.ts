@@ -193,7 +193,7 @@ Format as JSON with numerical values and clear reasoning.
 
       try {
         const response = await this.openai.chat.completions.create({
-          model: 'gpt-4',
+          model: 'gpt-4o',
           messages: [{ role: 'user', content: prompt }],
           temperature: 0.3,
           // Note: timeout handled by OpenAI client configuration
@@ -268,7 +268,7 @@ Format as comprehensive JSON structure.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.4
     });
@@ -298,7 +298,7 @@ Format as detailed JSON structure.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.5
     });
@@ -328,7 +328,7 @@ Format as JSON structure with trend categories.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.4
     });
@@ -361,7 +361,7 @@ Format as comprehensive JSON risk register.
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.3
     });
@@ -400,7 +400,7 @@ Format as comprehensive JSON structure matching the MarketResearchReport interfa
 `;
 
     const response = await this.openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.4,
       max_tokens: 4000
