@@ -114,20 +114,12 @@ export class MarketResearchAgent {
     const validatedInput = validationResult.data!;
 
     try {
-      // Parallel research execution for efficiency with error handling
-      const [
-        marketSizing,
-        competitiveIntel,
-        customerInsights,
-        trendAnalysis,
-        riskAssessment
-      ] = await Promise.all([
-        this.analyzeMarketSizing(validatedInput),
-        this.analyzeCompetitiveLandscape(validatedInput),
-        this.analyzeCustomerSegments(validatedInput),
-        this.analyzeTrends(validatedInput),
-        this.assessRisks(validatedInput)
-      ]);
+      // Serialized execution to avoid TPM spikes and reduce concurrency pressure
+      const marketSizing = await this.analyzeMarketSizing(validatedInput);
+      const competitiveIntel = await this.analyzeCompetitiveLandscape(validatedInput);
+      const customerInsights = await this.analyzeCustomerSegments(validatedInput);
+      const trendAnalysis = await this.analyzeTrends(validatedInput);
+      const riskAssessment = await this.assessRisks(validatedInput);
 
       // Synthesize findings into comprehensive report
       const report = await this.synthesizeReport(validatedInput, {

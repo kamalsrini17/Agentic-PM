@@ -195,7 +195,7 @@ const WORKFLOW_TEMPLATES: Record<string, Partial<WorkflowDefinition>> = {
         retryPolicy: { maxRetries: 1, backoffMs: 3000, exponential: false },
         required: true,
         parallelizable: false,
-        inputs: { evaluationModels: ['gpt-4-turbo-preview'] }
+        inputs: { evaluationModels: ['gpt-4o'] }
       }
     ]
   },
@@ -269,7 +269,7 @@ const WORKFLOW_TEMPLATES: Record<string, Partial<WorkflowDefinition>> = {
         required: true,
         parallelizable: false,
         inputs: { 
-          evaluationModels: ['gpt-4-turbo-preview', 'claude-3-opus-20240229'],
+          evaluationModels: ['gpt-4o', 'claude-3-opus-20240229'],
           includeRiskAnalysis: true 
         }
       },

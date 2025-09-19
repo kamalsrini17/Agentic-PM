@@ -118,9 +118,9 @@ export class OptimizedEvalsAgent {
   private cacheHitRate: number = 0;
   
   // Optimization strategies
-  private readonly FAST_EVALUATION_MODELS = ['gpt-4', 'claude-3-haiku-20240307'];
-  private readonly ACCURATE_EVALUATION_MODELS = ['gpt-4-turbo-preview', 'claude-3-opus-20240229'];
-  private readonly COST_EFFECTIVE_MODELS = ['gpt-4', 'claude-3-haiku-20240307'];
+  private readonly FAST_EVALUATION_MODELS = ['gpt-4o', 'claude-3-haiku-20240307'];
+  private readonly ACCURATE_EVALUATION_MODELS = ['gpt-4o', 'claude-3-opus-20240229'];
+  private readonly COST_EFFECTIVE_MODELS = ['gpt-4o', 'claude-3-haiku-20240307'];
 
   constructor() {
     this.multiModelAI = new MultiModelAI();
@@ -381,14 +381,14 @@ export class OptimizedEvalsAgent {
 
   private selectBestModelForDimension(dimension: string, strategy: 'balanced'): string {
     const dimensionModelMap: Record<string, string[]> = {
-      'content-quality': ['gpt-4-turbo-preview', 'claude-3-opus-20240229'],
-      'market-research': ['gpt-4-turbo-preview', 'claude-3-sonnet-20240229'],
-      'strategic-soundness': ['claude-3-opus-20240229', 'gpt-4-turbo-preview'],
-      'implementation-readiness': ['gpt-4', 'claude-3-haiku-20240307'],
-      'technical-feasibility': ['gpt-4-turbo-preview', 'claude-3-sonnet-20240229']
+      'content-quality': ['gpt-4o', 'claude-3-opus-20240229'],
+      'market-research': ['gpt-4o', 'claude-3-sonnet-20240229'],
+      'strategic-soundness': ['claude-3-opus-20240229', 'gpt-4o'],
+      'implementation-readiness': ['gpt-4o', 'claude-3-haiku-20240307'],
+      'technical-feasibility': ['gpt-4o', 'claude-3-sonnet-20240229']
     };
 
-    const preferredModels = dimensionModelMap[dimension] || ['gpt-4'];
+    const preferredModels = dimensionModelMap[dimension] || ['gpt-4o'];
     
     // Return the first available model from preferred list
     for (const model of preferredModels) {
@@ -397,7 +397,7 @@ export class OptimizedEvalsAgent {
       }
     }
 
-    return 'gpt-4'; // Ultimate fallback
+    return 'gpt-4o'; // Ultimate fallback
   }
 
   private estimateTotalCost(models: string[], dimensions: string[]): number {
@@ -573,7 +573,7 @@ export class OptimizedEvalsAgent {
     try {
       const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
       const response = await openai.chat.completions.create({
-        model: modelName.startsWith('gpt') ? modelName : 'gpt-4',
+        model: modelName.startsWith('gpt') ? modelName : 'gpt-4o',
         messages: [
           { role: 'system', content: this.getDimensionSystemPrompt(dimension) },
           { role: 'user', content: prompt }

@@ -76,20 +76,12 @@ export class DocumentPackageAgent {
     
     console.log(`[DocumentPackageAgent] Creating comprehensive package for: ${productTitle}`);
 
-    // Generate all package components in parallel
-    const [
-      executiveSummary,
-      businessCase,
-      implementationRoadmap,
-      riskAssessment,
-      successMetrics
-    ] = await Promise.all([
-      this.generateExecutiveSummary(productTitle, analysisData),
-      this.generateBusinessCase(productTitle, analysisData),
-      this.generateImplementationRoadmap(productTitle, analysisData),
-      this.generateRiskAssessment(productTitle, analysisData),
-      this.generateSuccessMetrics(productTitle, analysisData)
-    ]);
+    // Generate package components sequentially to avoid TPM spikes
+    const executiveSummary = await this.generateExecutiveSummary(productTitle, analysisData);
+    const businessCase = await this.generateBusinessCase(productTitle, analysisData);
+    const implementationRoadmap = await this.generateImplementationRoadmap(productTitle, analysisData);
+    const riskAssessment = await this.generateRiskAssessment(productTitle, analysisData);
+    const successMetrics = await this.generateSuccessMetrics(productTitle, analysisData);
 
     const packageData: ProductAnalysisPackage = {
       executiveSummary,
